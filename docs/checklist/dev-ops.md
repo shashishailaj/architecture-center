@@ -4,6 +4,9 @@ titleSuffix: Azure Design Review Framework
 description: Checklist that provides guidance related to DevOps.
 author: dragon119
 ms.date: 01/10/2018
+ms.topic: checklist
+ms.service: architecture-center
+ms.subservice: well-architected
 ms.custom: checklist
 ---
 
@@ -43,7 +46,7 @@ DevOps is the integration of development, quality assurance, and IT operations i
 
 **Instrument the application for insight.** To understand the health of your application, you need to know how it's performing and whether it's experiencing any errors or problems. Always include instrumentation as a design requirement, and build the instrumentation into the application from the start. Instrumentation must include event logging for root cause analysis, but also telemetry and metrics to monitor the overall health and usage of the application.
 
-**Track your technical debt.** In many projects, release schedules can get prioritized over code quality to one degree or another. Always keep track when this occurs. Document any shortcuts or other nonoptimal implementations, and schedule time in the future to revisit these issues.
+**Track your technical debt.** In many projects, release schedules can get prioritized over code quality to one degree or another. Always keep track when this occurs. Document any shortcuts or other suboptimal implementations, and schedule time in the future to revisit these issues.
 
 **Consider pushing updates directly to production.** To reduce the overall release cycle time, consider pushing properly tested code commits directly to production. Use [feature toggles][feature-toggles] to control which features are enabled. This allows you to move from development to release quickly, using the toggles to enable or disable features. Toggles are also useful when performing tests such as [canary releases][canary-release], where a particular feature is deployed to a subset of the production environment.
 
@@ -55,19 +58,19 @@ DevOps is the integration of development, quality assurance, and IT operations i
 
 **Test in production.** The release process doesn't end with deployment to production. Have tests in place to ensure that deployed code works as expected. For deployments that are infrequently updated, schedule production testing as a regular part of maintenance.
 
-**Automate performance testing to identify performance issues early.** The impact of a serious performance issue can be just as severe as a bug in the code. While automated functional tests can prevent application bugs, they might not detect performance problems. Define acceptable performance goals for metrics like latency, load times, and resource usage. Include automated performance tests in your release pipeline, to make sure the application meets those goals.
+**Automate performance testing to identify performance issues early.** The impact of a serious performance issue can be as severe as a bug in the code. While automated functional tests can prevent application bugs, they might not detect performance problems. Define acceptable performance goals for metrics like latency, load times, and resource usage. Include automated performance tests in your release pipeline, to make sure the application meets those goals.
 
 **Perform capacity testing.** An application might work fine under test conditions, and then have problems in production due to scale or resource limitations. Always define the maximum expected capacity and usage limits. Test to make sure the application can handle those limits, but also test what happens when those limits are exceeded. Capacity testing should be performed at regular intervals.
 
-After the initial release, you should run performance and capacity tests whenever updates are made to production code. Use historical data to fine tune tests and to determine what types of tests need to be performed.
+After the initial release, you should run performance and capacity tests whenever updates are made to production code. Use historical data to fine-tune tests and to determine what types of tests need to be performed.
 
 **Perform automated security penetration testing.** Ensuring your application is secure is as important as testing any other functionality. Make automated penetration testing a standard part of the build and deployment process. Schedule regular security tests and vulnerability scanning on deployed applications, monitoring for open ports, endpoints, and attacks. Automated testing does not remove the need for in-depth security reviews at regular intervals.
 
-**Perform automated business continuity testing.** Develop tests for large scale business continuity, including backup recovery and failover. Set up automated processes to perform these tests regularly.
+**Perform automated business continuity testing.** Develop tests for large-scale business continuity, including backup recovery and failover. Set up automated processes to perform these tests regularly.
 
 ## Release
 
-**Automate deployments.** Automate deploying the application to test, staging, and production environments. Automation enables faster and more reliable deployments, and ensures consistent deployments to any supported environment. It removes the risk of human error caused by manual deployments. It also makes it easy to schedule releases for convenient times, to minimize any effects of potential downtime.
+**Automate deployments.** Automate deploying the application to test, staging, and production environments. Automation enables faster and more reliable deployments, and ensures consistent deployments to any supported environment. It removes the risk of human error caused by manual deployments. It also makes it easy to schedule releases for convenient times, to minimize any effects of potential downtime. Have systems in place to detect any problems during rollout, and have an automated way to roll forward fixes or roll back changes.
 
 **Use continuous integration.** Continuous integration (CI) is the practice of merging all developer code into a central codebase on a regular schedule, and then automatically performing standard build and test processes. CI ensures that an entire team can work on a codebase at the same time without having conflicts. It also ensures that code defects are found as early as possible. Preferably, the CI process should run every time that code is committed or checked in. At the very least, it should run once per day.
 
@@ -85,13 +88,11 @@ After the initial release, you should run performance and capacity tests wheneve
 
 **Document all changes.** Minor updates and configuration changes can be a source of confusion and versioning conflict. Always keep a clear record of any changes, no matter how small. Log everything that changes, including patches applied, policy changes, and configuration changes. (Don't include sensitive data in these logs. For example, log that a credential was updated, and who made the change, but don't record the updated credentials.) The record of the changes should be visible to the entire team.
 
-**Automate Deployments.** Automate all deployments, and have systems in place to detect any problems during rollout. Have a mitigation process for preserving the existing code and data in production, before the update replaces them in all production instances. Have an automated way to roll forward fixes or roll back changes.
-
-**Consider making infrastructure immutable.** Immutable infrastructure is the principle that you shouldn’t modify infrastructure after it’s deployed to production. Otherwise, you can get into a state where ad hoc changes have been applied, making it hard to know exactly what changed. Immutable infrastructure works by replacing entire servers as part of any new deployment. This allows the code and the hosting environment to be tested and deployed as a block. Once deployed, infrastructure components aren't modified until the next build and deploy cycle.
+**Consider making infrastructure immutable.** Immutable infrastructure is the principle that you shouldn't modify infrastructure after it's deployed to production. Otherwise, you can get into a state where ad hoc changes have been applied, making it hard to know exactly what changed. Immutable infrastructure works by replacing entire servers as part of any new deployment. This allows the code and the hosting environment to be tested and deployed as a block. Once deployed, infrastructure components aren't modified until the next build and deploy cycle.
 
 ## Monitoring
 
-**Make systems observable.** The operations team should always have clear visibility into the health and status of a system or service. Set up external health endpoints to monitor status, and ensure that applications are coded to instrument the operations metrics. Use a common and consistent schema that lets you correlate events across systems. [Azure Diagnostics][azure-diagnostics] and [Application Insights][app-insights] are the standard method of tracking the health and status of Azure resources. Microsoft [Operation Management Suite][oms] also provides centralized monitoring and management for cloud or hybrid solutions.
+**Make systems observable.** The operations team should always have clear visibility into the health and status of a system or service. Set up external health endpoints to monitor status, and ensure that applications are coded to instrument the operations metrics. Use a common and consistent schema that helps you correlate events across systems. [Azure Diagnostics][azure-diagnostics] and [Application Insights][app-insights] are the standard method of tracking the health and status of Azure resources. Microsoft [Operation Management Suite][oms] also provides centralized monitoring and management for cloud or hybrid solutions.
 
 **Aggregate and correlate logs and metrics**. A properly instrumented telemetry system will provide a large amount of raw performance data and event logs. Make sure that telemetry and log data is processed and correlated in a short period of time, so that operations staff always have an up-to-date picture of system health. Organize and display data in ways that give a cohesive view of any issues, so that whenever possible it's clear when events are related to one another.
 
@@ -111,7 +112,8 @@ After the initial release, you should run performance and capacity tests wheneve
 
 Containers also create an abstraction layer between the application and the underlying operating system, which provides consistency across environments. This abstraction can also isolate a container from other processes or applications running on a host.
 
-**Implement resiliency and self-healing.** Resiliency is the ability of an application to recover from failures. Strategies for resiliency include retrying transient failures, and failing over to a secondary instance or even another region. For more information, see [Designing resilient applications for Azure][resiliency]. Instrument your applications so that issues are reported immediately and you can manage outages or other system failures.
+**Implement resiliency and self-healing.** Resiliency is the ability of an application to recover from failures. Strategies for resiliency include retrying transient failures, and failing over to a secondary instance or even another region. For more information, see [Designing reliable Azure applications](../framework/resiliency/app-design.md)
+. Instrument your applications so that issues are reported immediately and you can manage outages or other system failures.
 
 **Have an operations manual.** An operations manual or *runbook* documents the procedures and management information needed for operations staff to maintain a system. Also document any operations scenarios and mitigation plans that might come into play during a failure or other disruption to your service. Create this documentation during the development process, and keep it up to date afterwards. This is a living document, and should be reviewed, tested, and improved regularly.
 
@@ -123,34 +125,33 @@ Shared documentation is critical. Encourage team members to contribute and share
 
 **Use configuration management.** Configuration changes should be planned, visible to operations, and recorded. This could take the form of a configuration management database, or a configuration-as-code approach. Configuration should be audited regularly to ensure that what's expected is actually in place.
 
-**Get an Azure support plan and understand the process.** Azure offers a number of [support plans][azure-support-plans]. Determine the right plan for your needs, and make sure the entire team knows how to use it. Team members should understand the details of the plan, how the support process works, and how to open a support ticket with Azure. If you are anticipating a high-scale event, Azure support can assist you with increasing your service limits. For more information, see the [Azure Support FAQs](https://azure.microsoft.com/support/faq/).
+**Get an Azure support plan and understand the process.** Azure offers a number of [support plans][azure-support-plans]. Determine the right plan for your needs, and make sure the entire team knows how to use it. Team members should understand the details of the plan, how the support process works, and how to open a support ticket with Azure. If you are anticipating a high-scale event, Azure support can assist you with increasing your service limits. For more information, see the [Azure Support FAQs](https://azure.microsoft.com/support/faq).
 
 **Follow least-privilege principles when granting access to resources.** Carefully manage access to resources. Access should be denied by default, unless a user is explicitly given access to a resource. Only grant a user access to what they need to complete their tasks. Track user permissions and perform regular security audits.
 
-**Use role-based access control.** Assigning user accounts and access to resources should not be a manual process. Use [Role-Based Access Control][rbac] (RBAC) grant access based on [Azure Active Directory][azure-ad] identities and groups.
+**Use role-based access control.** Assigning user accounts and access to resources should not be a manual process. Use [role-based access control][rbac] (RBAC) grant access based on [Azure Active Directory][azure-ad] identities and groups.
 
 **Use a bug tracking system to track issues.** Without a good way to track issues, it's easy to miss items, duplicate work, or introduce additional problems. Don't rely on informal person-to-person communication to track the status of bugs. Use a bug tracking tool to record details about problems, assign resources to address them, and provide an audit trail of progress and status.
 
 **Manage all resources in a change management system.** All aspects of your DevOps process should be included in a management and versioning system, so that changes can be easily tracked and audited. This includes code, infrastructure, configuration, documentation, and scripts. Treat all these types of resources as code throughout the test/build/review process.
 
-**Use checklists.** Create operations checklists to ensure processes are followed. It’s common to miss something in a large manual, and following a checklist can force attention to details that might otherwise be overlooked. Maintain the checklists, and continually look for ways to automate tasks and streamline processes.
+**Use checklists.** Create operations checklists to ensure processes are followed. It's common to miss something in a large manual, and following a checklist can force attention to details that might otherwise be overlooked. Maintain the checklists, and continually look for ways to automate tasks and streamline processes.
 
 For more about DevOps, see [What is DevOps?][what-is-devops] on the Visual Studio site.
 
 <!-- links -->
 
-[app-insights]: /azure/application-insights/
-[azure-ad]: https://azure.microsoft.com/services/active-directory/
-[azure-diagnostics]: /azure/monitoring-and-diagnostics/azure-diagnostics
-[azure-monitor]: /azure/monitoring-and-diagnostics/monitoring-overview
-[azure-support-plans]: https://azure.microsoft.com/support/plans/
+[app-insights]: https://docs.microsoft.com/azure/application-insights
+[azure-ad]: https://azure.microsoft.com/services/active-directory
+[azure-diagnostics]: https://docs.microsoft.com/azure/monitoring-and-diagnostics/azure-diagnostics
+[azure-monitor]: https://docs.microsoft.com/azure/monitoring-and-diagnostics/monitoring-overview
+[azure-support-plans]: https://azure.microsoft.com/support/plans
 [blue-green]: https://martinfowler.com/bliki/BlueGreenDeployment.html
 [canary-release]:https://martinfowler.com/bliki/CanaryRelease.html
-[dev-test]: https://azure.microsoft.com/solutions/dev-test/
+[dev-test]: https://azure.microsoft.com/solutions/dev-test
 [feature-toggles]: https://www.martinfowler.com/articles/feature-toggles.html
 [oms]: https://www.microsoft.com/cloud-platform/operations-management-suite
-[rbac]: /azure/active-directory/role-based-access-control-what-is
-[resiliency]: ../resiliency/index.md
-[resource-manager]: /azure/azure-resource-manager/
-[trunk-based]: https://trunkbaseddevelopment.com/
-[what-is-devops]: https://www.visualstudio.com/learn/what-is-devops/
+[rbac]: https://docs.microsoft.com/azure/active-directory/role-based-access-control-what-is
+[resource-manager]: https://docs.microsoft.com/azure/azure-resource-manager
+[trunk-based]: https://trunkbaseddevelopment.com
+[what-is-devops]: https://www.visualstudio.com/learn/what-is-devops

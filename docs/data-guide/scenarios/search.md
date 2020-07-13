@@ -1,8 +1,11 @@
 ---
 title: Processing free-form text for search
-description: 
+description: Learn how to use free-form text processing to search and produce useful, actionable data from documents containing paragraphs of text.
 author: zoinerTejada
 ms.date: 02/12/2018
+ms.topic: guide
+ms.service: architecture-center
+ms.subservice: cloud-fundamentals
 ---
 
 # Processing free-form text for search

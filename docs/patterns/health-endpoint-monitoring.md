@@ -5,12 +5,13 @@ description: Implement functional checks in an application that external tools c
 keywords: design pattern
 author: dragon119
 ms.date: 06/23/2017
+ms.topic: design-pattern
+ms.service: architecture-center
+ms.subservice: cloud-fundamentals
 ms.custom: seodec18
 ---
 
 # Health Endpoint Monitoring pattern
-
-[!INCLUDE [header](../_includes/header.md)]
 
 Implement functional checks in an application that external tools can access through exposed endpoints at regular intervals. This can help to verify that applications and services are performing correctly.
 
@@ -101,7 +102,7 @@ This pattern is useful for:
 
 The following code examples, taken from the `HealthCheckController` class (a sample that demonstrates this pattern is available on [GitHub](https://github.com/mspnp/cloud-design-patterns/tree/master/health-endpoint-monitoring)), demonstrates exposing an endpoint for performing a range of health checks.
 
-The `CoreServices` method, shown below in C#, performs a series of checks on services used in the application. If all of the tests run without error, the method returns a 200 (OK) status code. If any of the tests raises an exception, the method returns a 500 (Internal Error) status code. The method could optionally return additional information when an error occurs, if the monitoring tool or framework is able to make use of it.
+The `CoreServices` method, shown below in C#, performs a series of checks on services used in the application. If all of the tests run without error, the method returns a 200 (OK) status code. If any of the tests raises an exception, the method returns a 500 (Internal Error) status code. The method could optionally return additional information when an error occurs, if the monitoring tool or framework is able to use it.
 
 ```csharp
 public ActionResult CoreServices()
@@ -196,7 +197,7 @@ In addition to routing requests, Traffic Manager pings a URL, port, and relative
 
 However, Traffic Manager will only wait ten seconds to receive a response from the monitoring URL. Therefore, you should ensure that your health verification code executes in this time, allowing for network latency for the round trip from Traffic Manager to your application and back again.
 
-> Read more information about using [Traffic Manager to monitor your applications](/azure/traffic-manager/). Traffic Manager is also discussed in [Multiple Datacenter Deployment Guidance](https://msdn.microsoft.com/library/dn589779.aspx).
+> Read more information about using [Traffic Manager to monitor your applications](https://docs.microsoft.com/azure/traffic-manager/). Traffic Manager is also discussed in [Multiple Datacenter Deployment Guidance](https://msdn.microsoft.com/library/dn589779.aspx).
 
 ## Related guidance
 
@@ -206,4 +207,4 @@ The following guidance can be useful when implementing this pattern:
 - [Receiving alert notifications][portal-alerts].
 - This pattern includes a downloadable [sample application](https://github.com/mspnp/cloud-design-patterns/tree/master/health-endpoint-monitoring).
 
-[portal-alerts]: /azure/azure-monitor/platform/alerts-metric
+[portal-alerts]: https://docs.microsoft.com/azure/azure-monitor/platform/alerts-metric

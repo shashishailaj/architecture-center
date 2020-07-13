@@ -1,13 +1,16 @@
 ---
 title: Online transaction processing (OLTP)
-description: 
+description: Learn about atomicity, consistency, and other features of online transaction processing (OLTP), which manages transactional data while supporting querying.
 author: zoinerTejada
-ms.date: 02/12/2018
+ms.date: 07/27/2019
+ms.topic: guide
+ms.service: architecture-center
+ms.subservice: cloud-fundamentals
 ---
 
 # Online transaction processing (OLTP)
 
-The management of transactional data using computer systems is referred to as Online Transaction Processing (OLTP). OLTP systems record business interactions as they occur in the day-to-day operation of the organization, and support querying of this data to make inferences.
+The management of transactional data using computer systems is referred to as online transaction processing (OLTP). OLTP systems record business interactions as they occur in the day-to-day operation of the organization, and support querying of this data to make inferences.
 
 ## Transactional data
 
@@ -17,7 +20,7 @@ Transactions typically need to be *atomic* and *consistent*. Atomicity means tha
 
 Transactional databases can support strong consistency for transactions using various locking strategies, such as pessimistic locking, to ensure that all data is strongly consistent within the context of the enterprise, for all users and processes.
 
-The most common deployment architecture that uses transactional data is the data store tier in a 3-tier architecture. A 3-tier architecture typically consists of a presentation tier, business logic tier, and data store tier. A related deployment architecture is the [N-tier](/azure/architecture/guide/architecture-styles/n-tier) architecture, which may have multiple middle-tiers handling business logic.
+The most common deployment architecture that uses transactional data is the data store tier in a 3-tier architecture. A 3-tier architecture typically consists of a presentation tier, business logic tier, and data store tier. A related deployment architecture is the [N-tier](../../guide/architecture-styles/n-tier.md) architecture, which may have multiple middle-tiers handling business logic.
 
 ## Typical traits of transactional data
 
@@ -57,16 +60,16 @@ Implementing and using an OLTP system can create a few challenges:
 
 ## OLTP in Azure
 
-Applications such as websites hosted in [App Service Web Apps](/azure/app-service/app-service-web-overview), REST APIs running in App Service, or mobile or desktop applications communicate with the OLTP system, typically via a REST API intermediary.
+Applications such as websites hosted in [App Service Web Apps](https://docs.microsoft.com/azure/app-service/app-service-web-overview), REST APIs running in App Service, or mobile or desktop applications communicate with the OLTP system, typically via a REST API intermediary.
 
 In practice, most workloads are not purely OLTP. There tends to be an analytical component as well. In addition, there is an increasing demand for real-time reporting, such as running reports against the operational system. This is also referred to as HTAP (Hybrid Transactional and Analytical Processing). For more information, see [Online Analytical Processing (OLAP)](./online-analytical-processing.md).
 
 In Azure, all of the following data stores will meet the core requirements for OLTP and the management of transaction data:
 
-- [Azure SQL Database](/azure/sql-database/)
-- [SQL Server in an Azure virtual machine](/azure/virtual-machines/windows/sql/virtual-machines-windows-sql-server-iaas-overview?toc=%2Fazure%2Fvirtual-machines%2Fwindows%2Ftoc.json)
-- [Azure Database for MySQL](/azure/mysql/)
-- [Azure Database for PostgreSQL](/azure/postgresql/)
+- [Azure SQL Database](https://docs.microsoft.com/azure/sql-database/)
+- [SQL Server in an Azure virtual machine](https://docs.microsoft.com/azure/virtual-machines/windows/sql/virtual-machines-windows-sql-server-iaas-overview?toc=/azure/virtual-machines/windows/toc.json)
+- [Azure Database for MySQL](https://docs.microsoft.com/azure/mysql/)
+- [Azure Database for PostgreSQL](https://docs.microsoft.com/azure/postgresql/)
 
 ## Key selection criteria
 
@@ -78,7 +81,7 @@ To narrow the choices, start by answering these questions:
 
 - Are your write throughput requirements particularly high? If yes, choose an option that provides in-memory tables.
 
-- Is your solution multi-tenant? If so, consider options that support capacity pools, where multiple database instances draw from an elastic pool of resources, instead of fixed resources per database. This can help you better distribute capacity across all database instances, and can make your solution more cost effective.
+- Is your solution multitenant? If so, consider options that support capacity pools, where multiple database instances draw from an elastic pool of resources, instead of fixed resources per database. This can help you better distribute capacity across all database instances, and can make your solution more cost effective.
 
 - Does your data need to be readable with low latency in multiple regions? If yes, choose an option that supports readable secondary replicas.
 
@@ -94,11 +97,11 @@ The following tables summarize the key differences in capabilities.
 
 <!-- markdownlint-disable MD033 -->
 
-|                              | Azure SQL Database | SQL Server in an Azure virtual machine | Azure Database for MySQL | Azure Database for PostgreSQL |
+| Capability  | Azure SQL Database | SQL Server in an Azure virtual machine | Azure Database for MySQL | Azure Database for PostgreSQL |
 |------------------------------|--------------------|----------------------------------------|--------------------------|-------------------------------|
 |      Is Managed Service      |        Yes         |                   No                   |           Yes            |              Yes              |
 |       Runs on Platform       |        N/A         |         Windows, Linux, Docker         |           N/A            |              N/A              |
-| Programmability <sup>1</sup> |   T-SQL, .NET, R   |         T-SQL, .NET, R, Python         |  T-SQL, .NET, R, Python  |              SQL              |
+| Programmability <sup>1</sup> |   T-SQL, .NET, R   |         T-SQL, .NET, R, Python         |           SQL            |              SQL, PL/pgSQL              |
 
 <!-- markdownlint-enable MD033 -->
 
@@ -106,16 +109,16 @@ The following tables summarize the key differences in capabilities.
 
 ### Scalability capabilities
 
-| | Azure SQL Database | SQL Server in an Azure virtual machine| Azure Database for MySQL | Azure Database for PostgreSQL|
+| Capability | Azure SQL Database | SQL Server in an Azure virtual machine| Azure Database for MySQL | Azure Database for PostgreSQL|
 | --- | --- | --- | --- | --- | --- |
-| Maximum database instance size | [4 TB](/azure/sql-database/sql-database-resource-limits) | 256 TB | [1 TB](/azure/mysql/concepts-limits) | [1 TB](/azure/postgresql/concepts-limits) |
+| Maximum database instance size | [4 TB](https://docs.microsoft.com/azure/sql-database/sql-database-resource-limits) | 256 TB | [16 TB](https://docs.microsoft.com/azure/mysql/concepts-limits) | [16 TB](https://docs.microsoft.com/azure/postgresql/concepts-limits) |
 | Supports capacity pools  | Yes | Yes | No | No |
 | Supports clusters scale out  | No | Yes | No | No |
 | Dynamic scalability (scale up)  | Yes | No | Yes | Yes |
 
 ### Analytic workload capabilities
 
-| | Azure SQL Database | SQL Server in an Azure virtual machine| Azure Database for MySQL | Azure Database for PostgreSQL|
+| Capability | Azure SQL Database | SQL Server in an Azure virtual machine| Azure Database for MySQL | Azure Database for PostgreSQL|
 | --- | --- | --- | --- | --- | --- |
 | Temporal tables | Yes | Yes | No | No |
 | In-memory (memory-optimized) tables | Yes | Yes | No | No |
@@ -124,24 +127,24 @@ The following tables summarize the key differences in capabilities.
 
 ### Availability capabilities
 
-| | Azure SQL Database | SQL Server in an Azure virtual machine| Azure Database for MySQL | Azure Database for PostgreSQL|
+| Capability | Azure SQL Database | SQL Server in an Azure virtual machine| Azure Database for MySQL | Azure Database for PostgreSQL|
 | --- | --- | --- | --- | --- | --- |
-| Readable secondaries | Yes | Yes | No | No |
-| Geographic replication | Yes | Yes | No | No |
+| Readable secondaries | Yes | Yes | Yes | Yes |
+| Geographic replication | Yes | Yes | Yes | Yes |
 | Automatic failover to secondary | Yes | No | No | No|
 | Point-in-time restore | Yes | Yes | Yes | Yes |
 
 ### Security capabilities
 
-|                                                                                                             | Azure SQL Database | SQL Server in an Azure virtual machine | Azure Database for MySQL | Azure Database for PostgreSQL |
+| Capability | Azure SQL Database | SQL Server in an Azure virtual machine | Azure Database for MySQL | Azure Database for PostgreSQL |
 |-------------------------------------------------------------------------------------------------------------|--------------------|----------------------------------------|--------------------------|-------------------------------|
 |                                             Row level security                                              |        Yes         |                  Yes                   |           Yes            |              Yes              |
 |                                                Data masking                                                 |        Yes         |                  Yes                   |            No            |              No               |
 |                                         Transparent data encryption                                         |        Yes         |                  Yes                   |           Yes            |              Yes              |
 |                                  Restrict access to specific IP addresses                                   |        Yes         |                  Yes                   |           Yes            |              Yes              |
-|                                  Restrict access to allow VNET access only                                  |        Yes         |                  Yes                   |            No            |              No               |
-|                                    Azure Active Directory authentication                                    |        Yes         |                  Yes                   |            No            |              No               |
+|                                  Restrict access to allow VNet access only                                  |        Yes         |                  Yes                   |           Yes            |              Yes              |
+|                                    Azure Active Directory authentication                                    |        Yes         |                  No                    |            Yes           |              Yes              |
 |                                       Active Directory authentication                                       |         No         |                  Yes                   |            No            |              No               |
-|                                         Multi-factor authentication                                         |        Yes         |                  Yes                   |            No            |              No               |
-| Supports [Always Encrypted](/sql/relational-databases/security/encryption/always-encrypted-database-engine) |        Yes         |                  Yes                   |           Yes            |              No               |
-|                                                 Private IP                                                  |         No         |                  Yes                   |           Yes            |              No               |
+|                                         Multi-factor authentication                                         |        Yes         |                  No                    |            Yes           |              Yes              |
+| Supports [Always Encrypted](https://docs.microsoft.com/sql/relational-databases/security/encryption/always-encrypted-database-engine) |        Yes         |                  Yes                   |            No            |              No               |
+|                                                 Private IP                                                  |         No         |                  Yes                   |            No            |              No               |

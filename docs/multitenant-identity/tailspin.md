@@ -1,22 +1,27 @@
 ---
 title: About the Tailspin Surveys application
 description: An overview of the Tailspin Surveys application.
-author: MikeWasson
+author: adamboeglin
 ms.date: 07/21/2017
+ms.topic: guide
+ms.service: architecture-center
+ms.category:
+  - developer-tools
+ms.subservice: reference-architecture
 ---
 
 # The Tailspin scenario
 
 [![GitHub](../_images/github.png) Sample code][sample application]
 
-Tailspin is a fictitious company that is developing a SaaS application named Surveys. This application enables organizations to create and publish online surveys.
+Tailspin is a fictional company that is developing a SaaS application named Surveys. This application enables organizations to create and publish online surveys.
 
 * An organization can sign up for the application.
 * After the organization is signed up, users can sign into the application with their organizational credentials.
 * Users can create, edit, and publish surveys.
 
 > [!NOTE]
-> To get started with the application, see [Run the Surveys application].
+> To get started with the application, see the [GitHub readme](https://github.com/mspnp/multitenant-saas-guidance/blob/master/get-started.md).
 
 ## Users can create, edit, and view surveys
 
@@ -50,7 +55,7 @@ Note that Alice signs into her own tenant, not as a guest of the Contoso tenant.
 
 The Surveys application consists of a web front end and a web API backend. Both are implemented using [ASP.NET Core].
 
-The web application uses Azure Active Directory (Azure AD) to authenticate users. The web application also calls Azure AD to get OAuth 2 access tokens for the Web API. Access tokens are cached in Azure Redis Cache. The cache enables multiple instances to share the same token cache (e.g., in a server farm).
+The web application uses Azure Active Directory (Azure AD) to authenticate users. The web application also calls Azure AD to get OAuth 2 access tokens for the Web API. Access tokens are cached in Azure Cache for Redis. The cache enables multiple instances to share the same token cache (for example, in a server farm).
 
 ![Architecture](./images/architecture.png)
 
@@ -58,8 +63,7 @@ The web application uses Azure Active Directory (Azure AD) to authenticate users
 
 <!-- links -->
 
-[authentication]: authenticate.md
+[authentication]: ./authenticate.md
 
-[Run the Surveys application]: ./run-the-app.md
-[ASP.NET Core]: /aspnet/core
+[ASP.NET Core]: https://docs.microsoft.com/aspnet/core
 [sample application]: https://github.com/mspnp/multitenant-saas-guidance

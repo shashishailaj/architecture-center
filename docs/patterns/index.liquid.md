@@ -5,12 +5,13 @@ description: Cloud Design Patterns for Microsoft Azure
 keywords: Azure
 author: dragon119
 ms.date: 12/10/2018
+ms.topic: design-pattern
+ms.service: architecture-center
+ms.subservice: cloud-fundamentals
 ms.custom: seodec18
 ---
 
 # Cloud Design Patterns
-
-[!INCLUDE [header](../../_includes/header.md)]
 
 These design patterns are useful for building reliable, scalable, secure applications in the cloud.
 

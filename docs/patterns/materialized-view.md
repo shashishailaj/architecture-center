@@ -5,12 +5,13 @@ description: Generate prepopulated views over the data in one or more data store
 keywords: design pattern
 author: dragon119
 ms.date: 06/23/2017
+ms.topic: design-pattern
+ms.service: architecture-center
+ms.subservice: cloud-fundamentals
 ms.custom: seodec18
 ---
 
 # Materialized View pattern
-
-[!INCLUDE [header](../_includes/header.md)]
 
 Generate prepopulated views over the data in one or more data stores when the data isn't ideally formatted for required query operations. This can help support efficient querying and data extraction, and improve application performance.
 
@@ -66,6 +67,7 @@ This pattern isn't useful in the following situations:
 - The source data is simple and easy to query.
 - The source data changes very quickly, or can be accessed without using a view. In these cases, you should avoid the processing overhead of creating views.
 - Consistency is a high priority. The views might not always be fully consistent with the original data.
+- When using microservices.  Microservices typically have well defined boundries aligning to [domain driven design (DDD)](/azure/architecture/microservices/model/tactical-ddd).
 
 ## Example
 
@@ -75,7 +77,7 @@ The following figure shows an example of using the Materialized View pattern to 
 
 Creating this materialized view requires complex queries. However, by exposing the query result as a materialized view, users can easily obtain the results and use them directly or incorporate them in another query. The view is likely to be used in a reporting system or dashboard, and can be updated on a scheduled basis such as weekly.
 
-> Although this example utilizes Azure table storage, many relational database management systems also provide native support for materialized views.
+> Although this example uses Azure table storage, many relational database management systems also provide native support for materialized views.
 
 ## Related patterns and guidance
 

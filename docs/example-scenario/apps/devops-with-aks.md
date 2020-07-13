@@ -4,6 +4,18 @@ titleSuffix: Azure Example Scenarios
 description: Build a DevOps pipeline for a Node.js web app with Jenkins, Azure Container Registry, Azure Kubernetes Service, Cosmos DB, and Grafana.
 author: iainfoulds
 ms.date: 07/05/2018
+ms.category:
+  - containers
+  - devops
+  - featured
+  - compute
+ms.topic: example-scenario
+ms.service: architecture-center
+ms.subservice: example-scenario
+social_image_url: /azure/architecture/example-scenario/apps/media/architecture-devops-with-aks.png
+ms.custom:
+    - devops
+    - microservices
 ---
 
 # CI/CD pipeline for container-based workloads
@@ -61,19 +73,17 @@ To monitor your application performance and report on issues, this scenario comb
 
 As part of the Azure Kubernetes Service cluster, a load balancer distributes application traffic to one or more containers (pods) that run your application. This approach to running containerized applications in Kubernetes provides a highly available infrastructure for your customers.
 
-For other availability topics, see the [availability checklist][availability] available in the Azure Architecture Center.
-
 ### Scalability
 
 Azure Kubernetes Service lets you scale the number of cluster nodes to meet the demands of your applications. As your application increases, you can scale out the number of Kubernetes nodes that run your service.
 
 Application data is stored in Azure Cosmos DB, a globally distributed, multi-model database that can scale globally. Cosmos DB abstracts the need to scale your infrastructure as with traditional database components, and you can choose to replicate your Cosmos DB globally to meet the demands of your customers.
 
-For other scalability topics, see the [scalability checklist][scalability] available in the Azure Architecture Center.
+For other scalability topics, see the [performance efficiency checklist][scalability] available in the Azure Architecture Center.
 
 ### Security
 
-To minimize the attack footprint, this scenario does not expose the Jenkins VM instance over HTTP. For any management tasks that require you to interact with Jenkins, you create a secure remote connection using an SSH tunnel from your local machine. Only SSH public key authentication is allowed for the Jenkins and Grafana VM instances. Password-based logins are disabled. For more information, see [Run a Jenkins server on Azure](../../reference-architectures/jenkins/index.md).
+To minimize the attack footprint, this scenario does not expose the Jenkins VM instance over HTTP. For any management tasks that require you to interact with Jenkins, you create a secure remote connection using an SSH tunnel from your local machine. Only SSH public key authentication is allowed for the Jenkins and Grafana VM instances. Password-based logins are disabled. For more information, see [Run a Jenkins server on Azure](./jenkins.md).
 
 For separation of credentials and permissions, this scenario uses a dedicated Azure Active Directory (AD) service principal. The credentials for this service principal are stored as a secure credential object in Jenkins so that they are not directly exposed and visible within scripts or the build pipeline.
 
@@ -83,7 +93,7 @@ For general guidance on designing secure solutions, see the [Azure Security Docu
 
 This scenario uses Azure Kubernetes Service for your application. Built into Kubernetes are resiliency components that monitor and restart the containers (pods) if there is an issue. Combined with running multiple Kubernetes nodes, your application can tolerate a pod or node being unavailable.
 
-For general guidance on designing resilient solutions, see [Designing resilient applications for Azure][resiliency].
+For general guidance on designing resilient solutions, see [Designing reliable Azure applications](../../framework/resiliency/app-design.md).
 
 ## Deploy the scenario
 
@@ -101,23 +111,29 @@ For general guidance on designing resilient solutions, see [Designing resilient 
 
     Make a note of the *appId* and *password* in the output from this command. You provide these values to the template when you deploy the scenario.
 
+- Find the supported Kubernetes versions for your deployment region by running [az aks get-versions][get-aks-versions]. The following command gets the [CLI default][aks-default-version] version:
+
+    ```azurecli-interactive
+    az aks get-versions -l <region> --query "orchestrators[?default!=null].orchestratorVersion" -o tsv
+    ```
+
 ### Walk-through
 
 To deploy this scenario with an Azure Resource Manager template, perform the following steps.
 
-<!-- markdownlint-disable MD033 -->
+1. Click the link below to deploy the solution.
 
-1. Click the **Deploy to Azure** button:<br><a href="https://portal.azure.com/#create/Microsoft.Template/uri/https%3A%2F%2Fraw.githubusercontent.com%2Fmspnp%2Fsolution-architectures%2Fmaster%2Fapps%2Fdevops-with-aks%2Fazuredeploy.json" target="_blank"><img src="https://azuredeploy.net/deploybutton.png"/></a>
+    [![Deploy to Azure](https://azuredeploy.net/deploybutton.png)](https://portal.azure.com/#create/Microsoft.Template/uri/https%3A%2F%2Fraw.githubusercontent.com%2Fmspnp%2Fsolution-architectures%2Fmaster%2Fapps%2Fdevops-with-aks%2Fazuredeploy.json)
+
 2. Wait for the template deployment to open in the Azure portal, then complete the following steps:
    - Choose to **Create new** resource group, then provide a name such as *myAKSDevOpsScenario* in the text box.
    - Select a region from the **Location** drop-down box.
    - Enter your service principal app ID and password from the `az ad sp create-for-rbac` command.
    - Provide a username and secure password for the Jenkins instance and Grafana console.
    - Provide an SSH key to secure logins to the Linux VMs.
+   - Enter the Kubernetes version from the `az aks get-versions` command.
    - Review the terms and conditions, then check **I agree to the terms and conditions stated above**.
    - Select the **Purchase** button.
-
-<!-- markdownlint-enable MD033 -->
 
 It can take 15-20 minutes for the deployment to complete.
 
@@ -137,25 +153,23 @@ This scenario used Azure Container Registry and Azure Kubernetes Service to stor
 
 <!-- links -->
 [architecture]: ./media/architecture-devops-with-aks.png
-[autoscaling]: ../../best-practices/auto-scaling.md
-[availability]: ../../checklist/availability.md
-[docs-aci]: /azure/container-instances/container-instances-overview
-[docs-acr]: /azure/container-registry/container-registry-intro
-[docs-aks]: /azure/aks/intro-kubernetes
-[docs-azure-monitor]: /azure/monitoring-and-diagnostics/monitoring-overview
-[docs-cosmos-db]: /azure/cosmos-db/introduction
-[docs-virtual-machines]: /azure/virtual-machines/linux/overview
-[createsp]: /cli/azure/ad/sp#az-ad-sp-create
-[grafana]: https://grafana.com/
-[jenkins]: https://jenkins.io/
-[resiliency]: ../../resiliency/index.md
-[resource-groups]: /azure/azure-resource-manager/resource-group-overview
-[security]: /azure/security/
-[scalability]: ../../checklist/scalability.md
-[sshkeydocs]: /azure/virtual-machines/linux/mac-create-ssh-keys
-[azure-pipelines]: /azure/devops/pipelines
-[kubernetes]: https://kubernetes.io/
-[service-fabric]: /azure/service-fabric/
+[docs-aci]: https://docs.microsoft.com/azure/container-instances/container-instances-overview
+[docs-acr]: https://docs.microsoft.com/azure/container-registry/container-registry-intro
+[docs-aks]: https://docs.microsoft.com/azure/aks/intro-kubernetes
+[docs-azure-monitor]: https://docs.microsoft.com/azure/monitoring-and-diagnostics/monitoring-overview
+[docs-cosmos-db]: https://docs.microsoft.com/azure/cosmos-db/introduction
+[docs-virtual-machines]: https://docs.microsoft.com/azure/virtual-machines/linux/overview
+[createsp]: https://docs.microsoft.com/cli/azure/ad/sp#az-ad-sp-create
+[grafana]: https://grafana.com
+[jenkins]: https://jenkins.io
+[security]: https://docs.microsoft.com/azure/security
+[scalability]: ../../checklist/performance-efficiency.md
+[sshkeydocs]: https://docs.microsoft.com/azure/virtual-machines/linux/mac-create-ssh-keys
+[azure-pipelines]: https://docs.microsoft.com/azure/devops/pipelines
+[kubernetes]: https://kubernetes.io
+[service-fabric]: https://docs.microsoft.com/azure/service-fabric
+[get-aks-versions]: https://docs.microsoft.com/cli/azure/aks?view=azure-cli-latest#az-aks-get-versions
+[aks-default-version]: https://docs.microsoft.com/azure/aks/supported-kubernetes-versions
 
 [small-pricing]: https://azure.com/e/841f0a75b1ea4802ba1ac8f7918a71e7
 [medium-pricing]: https://azure.com/e/eea0e6d79b4e45618a96d33383ec77ba

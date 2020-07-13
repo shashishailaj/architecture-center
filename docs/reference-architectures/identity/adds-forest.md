@@ -2,12 +2,15 @@
 title: Create an AD DS resource forest in Azure
 titleSuffix: Azure Reference Architectures
 description: How to create a trusted Active Directory domain in Azure.
-
-  guidance,vpn-gateway,expressroute,load-balancer,virtual-network,active-directory
-
 author: telmosampaio
 ms.date: 05/02/2018
-ms.custom: seodec18
+ms.topic: reference-architecture
+ms.service: architecture-center
+ms.category:
+  - identity
+  - hybrid
+ms.subservice: reference-architecture
+ms.custom: seodec18, identity
 ---
 
 # Create an Active Directory Domain Services (AD DS) resource forest in Azure
@@ -32,14 +35,11 @@ The architecture has the following components.
 - **Active Directory servers**. These are domain controllers implementing domain services running as VMs in the cloud. These servers host a forest containing one or more domains, separate from those located on-premises.
 - **One-way trust relationship**. The example in the diagram shows a one-way trust from the domain in Azure to the on-premises domain. This relationship enables on-premises users to access resources in the domain in Azure, but not the other way around. It is possible to create a two-way trust if cloud users also require access to on-premises resources.
 - **Active Directory subnet**. The AD DS servers are hosted in a separate subnet. Network security group (NSG) rules protect the AD DS servers and provide a firewall against traffic from unexpected sources.
-- **Azure gateway**. The Azure gateway provides a connection between the on-premises network and the Azure VNet. This can be a [VPN connection][azure-vpn-gateway] or [Azure ExpressRoute][azure-expressroute]. For more information, see [Implementing a secure hybrid network architecture in Azure][implementing-a-secure-hybrid-network-architecture].
+- **Azure gateway**. The Azure gateway provides a connection between the on-premises network and the Azure VNet. This can be a [VPN connection][azure-vpn-gateway] or [Azure ExpressRoute][azure-expressroute]. For more information, see [Connect an on-premises network to Azure using a VPN gateway](../hybrid-networking/vpn.md).
 
 ## Recommendations
 
-For specific recommendations on implementing Active Directory in Azure, see the following articles:
-
-- [Extending Active Directory Domain Services (AD DS) to Azure][adds-extend-domain].
-- [Guidelines for Deploying Windows Server Active Directory on Azure Virtual Machines][ad-azure-guidelines].
+For specific recommendations on implementing Active Directory in Azure, see [Extending Active Directory Domain Services (AD DS) to Azure][adds-extend-domain].
 
 ### Trust
 
@@ -82,6 +82,28 @@ Forest level trusts are transitive. If you establish a forest level trust betwee
 
 For Active Directory-specific security considerations, see the security considerations section in [Extending Active Directory to Azure][adds-extend-domain].
 
+## DevOps considerations
+
+For DevOps considerations, see [DevOps: Extending Active Directory Domain Services (AD DS) to Azure](adds-extend-domain.md#devops-considerations).
+
+## Cost considerations
+
+Use the [Azure pricing calculator][azure-pricing-calculator] to estimate costs. Other considerations are described in the Cost section in [Microsoft Azure Well-Architected Framework][aaf-cost].
+
+Here are cost considerations for the services used in this architecture.
+
+### AD Domain Services
+
+Consider having Active Directory Domain Services as a shared service that is consumed by multiple workloads to lower costs. For more information, see [Active Directory Domain Services pricing][ADDS-pricing].
+
+### Azure VPN Gateway
+
+The main component of this architecture is the VPN gateway service. You are charged based on the amount of time that the gateway is provisioned and available.
+
+All inbound traffic is free, all outbound traffic is charged. Internet bandwidth costs are applied to VPN outbound traffic.  
+
+For more information, see [VPN Gateway Pricing][azure-gateway-charges].
+
 ## Deploy the solution
 
 A deployment for this architecture is available on [GitHub][github]. Note that the entire deployment can take up to two hours, which includes creating the VPN gateway and running the scripts that configure AD DS.
@@ -90,7 +112,7 @@ A deployment for this architecture is available on [GitHub][github]. Note that t
 
 1. Clone, fork, or download the zip file for the [GitHub repository](https://github.com/mspnp/identity-reference-architectures).
 
-2. Install [Azure CLI 2.0](/cli/azure/install-azure-cli?view=azure-cli-latest).
+2. Install [Azure CLI 2.0](https://docs.microsoft.com/cli/azure/install-azure-cli?view=azure-cli-latest).
 
 3. Install the [Azure building blocks](https://github.com/mspnp/template-building-blocks/wiki/Install-Azure-Building-Blocks) npm package.
 
@@ -129,7 +151,7 @@ A deployment for this architecture is available on [GitHub][github]. Note that t
 3. Run the following command and wait for the deployment to finish.
 
     ```bash
-    azbb -s <subscription_id> -g <resource group> -l <location> -p onoprem.json --deploy
+    azbb -s <subscription_id> -g <resource group> -l <location> -p azure.json --deploy
     ```
 
    Deploy to the same resource group as the on-premises VNet.
@@ -158,29 +180,20 @@ A deployment for this architecture is available on [GitHub][github]. Note that t
 - Learn the best practices for [creating an AD FS infrastructure][adfs] in Azure.
 
 <!-- links -->
-[adds-extend-domain]: adds-extend-domain.md
-[adfs]: adfs.md
-[azure-cli-2]: /azure/install-azure-cli
-[azbb]: https://github.com/mspnp/template-building-blocks/wiki/Install-Azure-Building-Blocks
 
-[implementing-a-secure-hybrid-network-architecture]: ../dmz/secure-vnet-hybrid.md
-[implementing-a-secure-hybrid-network-architecture-with-internet-access]: ../dmz/secure-vnet-dmz.md
-
-[running-VMs-for-an-N-tier-architecture-on-Azure]: ../virtual-machines-windows/n-tier.md
-
-[ad-azure-guidelines]: https://msdn.microsoft.com/library/azure/jj156090.aspx
-[azure-expressroute]: /azure/expressroute/expressroute-introduction
-[azure-vpn-gateway]: /azure/vpn-gateway/vpn-gateway-about-vpngateways
-[considerations]: ./considerations.md
+[aaf-cost]: ../../framework/cost/overview.md
+[adds-extend-domain]: ./adds-extend-domain.md
+[ADDS-pricing]: https://azure.microsoft.com/pricing/details/active-directory-ds
+[adfs]: ./adfs.md
+[azure-gateway-charges]: https://azure.microsoft.com/pricing/details/vpn-gateway
+[azure-expressroute]: https://docs.microsoft.com/azure/expressroute/expressroute-introduction
+[azure-vpn-gateway]: https://docs.microsoft.com/azure/vpn-gateway/vpn-gateway-about-vpngateways
+[considerations]: ./index.md
+[azure-pricing-calculator]: https://azure.microsoft.com/pricing/calculator
 [creating-external-trusts]: https://technet.microsoft.com/library/cc816837(v=ws.10).aspx
 [creating-forest-trusts]: https://technet.microsoft.com/library/cc816810(v=ws.10).aspx
 [github]: https://github.com/mspnp/identity-reference-architectures/tree/master/adds-forest
-[incoming-trust]: https://raw.githubusercontent.com/mspnp/identity-reference-architectures/master/adds-forest/extensions/incoming-trust.ps1
 [microsoft_systems_center]: https://microsoft.com/cloud-platform/system-center
 [monitoring_ad]: https://msdn.microsoft.com/library/bb727046.aspx
-[resource-manager-overview]: /azure/azure-resource-manager/resource-group-overview
-[solution-script]: https://raw.githubusercontent.com/mspnp/identity-reference-architectures/master/adds-forest/Deploy-ReferenceArchitecture.ps1
 [standby-operations-masters]: https://technet.microsoft.com/library/cc794737(v=ws.10).aspx
-[outgoing-trust]: https://raw.githubusercontent.com/mspnp/identity-reference-architectures/master/adds-forest/extensions/outgoing-trust.ps1
-[verify-a-trust]: https://technet.microsoft.com/library/cc753821.aspx
 [visio-download]: https://archcenter.blob.core.windows.net/cdn/identity-architectures.vsdx

@@ -4,8 +4,21 @@ titleSuffix: Azure Example Scenarios
 description: Create a multitier web application built for high availability and disaster recovery on Azure using Azure virtual machines, availability sets, availability zones, Azure Site Recovery, and Azure Traffic Manager.
 author: sujayt
 ms.date: 11/16/2018
-ms.custom: product-team
+ms.category:
+  - web
+  - featured
+ms.topic: example-scenario
+ms.service: architecture-center
+ms.subservice: example-scenario
+ms.custom:
+  - product-team
+  - bcdr
+  - web-apps
+  - application-development
+social_image_url: /azure/architecture/example-scenario/infrastructure/media/architecture-disaster-recovery-multi-tier-app.png
 ---
+
+<!-- cSpell:ignore sujayt -->
 
 # Multitier web application built for high availability and disaster recovery on Azure
 
@@ -15,7 +28,7 @@ This example scenario is applicable to any industry that needs to deploy resilie
 - Business tier: Processes the user interactions and makes logical decisions about the next steps. This layer connects the web tier and the data tier.
 - Data tier: Stores the application data. Either a database, object storage, or file storage is typically used.
 
-Common application scenarios include any mission critical application running on Windows or Linux. This can be an off-the-shelf application such as SAP and SharePoint or a custom line-of-business application.
+Common application scenarios include any mission-critical application running on Windows or Linux. This can be an off-the-shelf application such as SAP and SharePoint or a custom line-of-business application.
 
 ## Relevant use cases
 
@@ -27,7 +40,7 @@ Other relevant use cases include:
 
 ## Architecture
 
-This scenario demonstrates a multitier application that uses ASP.NET and Microsoft SQL Server. In [Azure regions that support availability zones](/azure/availability-zones/az-overview#regions-that-support-availability-zones), you can deploy your virtual machines (VMs) in a source region across availability zones and replicate the VMs to the target region used for disaster recovery. In Azure regions that don't support availability zones, you can deploy your VMs within an availability set and replicate the VMs to the target region.
+This scenario demonstrates a multitier application that uses ASP.NET and Microsoft SQL Server. In [Azure regions that support availability zones](https://docs.microsoft.com/azure/availability-zones/az-overview#services-support-by-region), you can deploy your virtual machines (VMs) in a source region across availability zones and replicate the VMs to the target region used for disaster recovery. In Azure regions that don't support availability zones, you can deploy your VMs within an availability set and replicate the VMs to the target region.
 
 ![Architecture overview of a highly resilient multitier web application][architecture]
 
@@ -47,7 +60,7 @@ This scenario demonstrates a multitier application that uses ASP.NET and Microso
 
 - [Availability sets][docs-availability-sets] ensure that the VMs you deploy on Azure are distributed across multiple isolated hardware nodes in a cluster. If a hardware or software failure occurs within Azure, only a subset of your VMs are affected and your entire solution remains available and operational.
 - [Availability zones][docs-availability-zones] protect your applications and data from datacenter failures. Availability zones are separate physical locations within an Azure region. Each zone consists of one or more datacenters equipped with independent power, cooling, and networking.
-- [Azure Site Recovery (ASR)][docs-azure-site-recovery] allows you to replicate VMs to another Azure region for business continuity and disaster recovery needs. You can conduct periodic disaster recovery drills to ensure you meet the compliance needs. The VM will be replicated with the specified settings to the selected region so that you can recover your applications in the event of outages in the source region.
+- [Azure Site Recovery][docs-azure-site-recovery] allows you to replicate VMs to another Azure region for business continuity and disaster recovery needs. You can conduct periodic disaster recovery drills to ensure you meet the compliance needs. The VM will be replicated with the specified settings to the selected region so that you can recover your applications in the event of outages in the source region.
 - [Azure Traffic Manager][docs-traffic-manager] is a DNS-based traffic load balancer that distributes traffic optimally to services across global Azure regions while providing high availability and responsiveness.
 - [Azure Load Balancer][docs-load-balancer] distributes inbound traffic according to defined rules and health probes. A load balancer provides low latency and high throughput, scaling up to millions of flows for all TCP and UDP applications. A public load balancer is used in this scenario to distribute incoming client traffic to the web tier. An internal load balancer is used in this scenario to distribute traffic from the business tier to the back-end SQL Server cluster.
 
@@ -63,7 +76,7 @@ This scenario demonstrates a multitier application that uses ASP.NET and Microso
 
 You can add or remove VMs in each tier based on your scaling requirements. Because this scenario uses load balancers, you can add more VMs to a tier without affecting application uptime.
 
-For other scalability topics, see the [scalability checklist][scalability] in the Azure Architecture Center.
+For other scalability topics, see the [performance efficiency checklist][scalability] in the Azure Architecture Center.
 
 ### Security
 
@@ -82,21 +95,16 @@ Configuring disaster recovery for Azure VMs using Azure Site Recovery will incur
 We have provided a [sample cost calculator][calculator] for configuring disaster recovery for a three-tier application using six virtual machines. All of the services are pre-configured in the cost calculator. To see how the pricing would change for your particular use case, change the appropriate variables to estimate the cost.
 
 <!-- links -->
-[architecture]: ./media/arhitecture-disaster-recovery-multi-tier-app.png
-[autoscaling]: /azure/architecture/best-practices/auto-scaling
-[availability]: ../../checklist/availability.md
-[resiliency]: /azure/architecture/resiliency/
-[security]: /azure/security/
-[scalability]: /azure/architecture/checklist/scalability
-[docs-availability-zones]: /azure/availability-zones/az-overview
-[docs-load-balancer]: /azure/load-balancer/load-balancer-overview
-[docs-nsg]: /azure/virtual-network/security-overview
-[docs-vmss]: /azure/virtual-machine-scale-sets/overview
-[docs-sql-always-on]: /sql/database-engine/availability-groups/windows/overview-of-always-on-availability-groups-sql-server
-[docs-vmss-autoscale]: /azure/virtual-machine-scale-sets/virtual-machine-scale-sets-autoscale-overview
-[docs-vnet]: /azure/virtual-network/virtual-networks-overview
-[docs-sql-server-linux]: /sql/linux/sql-server-linux-overview?view=sql-server-linux-2017
-[docs-traffic-manager]: /azure/traffic-manager/
-[docs-azure-site-recovery]: /azure/site-recovery/azure-to-azure-quickstart/
-[docs-availability-sets]: /azure/virtual-machines/windows/manage-availability/
-[calculator]: https://azure.com/e/6835332265044d6d931d68c917979e6d/
+
+[architecture]: ./media/architecture-disaster-recovery-multi-tier-app.png
+[security]: https://docs.microsoft.com/azure/security
+[scalability]: ../../checklist/performance-efficiency.md
+[docs-availability-zones]: https://docs.microsoft.com/azure/availability-zones/az-overview
+[docs-load-balancer]: https://docs.microsoft.com/azure/load-balancer/load-balancer-overview
+[docs-nsg]: https://docs.microsoft.com/azure/virtual-network/security-overview
+[docs-sql-always-on]: https://docs.microsoft.com/sql/database-engine/availability-groups/windows/overview-of-always-on-availability-groups-sql-server
+[docs-sql-server-linux]: https://docs.microsoft.com/sql/linux/sql-server-linux-overview?view=sql-server-linux-2017
+[docs-traffic-manager]: https://docs.microsoft.com/azure/traffic-manager
+[docs-azure-site-recovery]: https://docs.microsoft.com/azure/site-recovery/azure-to-azure-quickstart
+[docs-availability-sets]: https://docs.microsoft.com/azure/virtual-machines/windows/manage-availability
+[calculator]: https://azure.com/e/6835332265044d6d931d68c917979e6d

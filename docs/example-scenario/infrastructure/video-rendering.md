@@ -4,8 +4,19 @@ titleSuffix: Azure Example Scenarios
 description: Run native HPC workloads in Azure using the Azure Batch service.
 author: adamboeglin
 ms.date: 07/13/2018
-ms.custom: fasttrack
+ms.category:
+  - compute
+ms.topic: example-scenario
+ms.service: architecture-center
+ms.subservice: example-scenario
+ms.custom:
+  - fasttrack
+  - hpc
+  - media
+social_image_url: /azure/architecture/example-scenario/infrastructure/media/architecture-video-rendering.png
 ---
+
+<!-- cSpell:ignore infiniband haswell cuda -->
 
 # 3D video rendering on Azure
 
@@ -24,7 +35,7 @@ Other relevant use cases include:
 
 ## Architecture
 
-![Architecture overview of the components involved in a Cloud Native HPC solution using Azure Batch][architecture]
+![Architecture overview of the components involved in a cloud-native HPC solution using Azure Batch][architecture]
 
 This scenario shows a workflow that uses Azure Batch. The data flows as follows:
 
@@ -39,11 +50,11 @@ To simplify this process, you could also use the [Batch Plugins for Maya and 3ds
 
 ### Components
 
-Azure Batch builds upon the following Azure technologies:
+Azure Batch builds on the following Azure technologies:
 
-- [Virtual Networks](/azure/virtual-network/virtual-networks-overview) are used for both the head node and the compute resources.
-- [Azure Storage accounts](/azure/storage/common/storage-introduction) are used for synchronization and data retention.
-- [Virtual Machine Scale Sets][vmss] are used by CycleCloud for compute resources.
+- [Virtual Networks](https://docs.microsoft.com/azure/virtual-network/virtual-networks-overview) are used for both the head node and the compute resources.
+- [Azure Storage accounts](https://docs.microsoft.com/azure/storage/common/storage-introduction) are used for synchronization and data retention.
+- [Virtual machine scale sets][vmss] are used by CycleCloud for compute resources.
 
 ## Considerations
 
@@ -56,11 +67,11 @@ While most rendering customers will choose resources with high CPU power, other 
 - Are the job types embarrassingly parallel or require infiniband connectivity for tightly coupled jobs?
 - Require fast I/O to access storage on the compute Nodes.
 
-Azure has a wide range of VM sizes that can address each and every one of the above application requirements, some are specific to HPC, but even the smallest sizes can be utilized to provide an effective grid implementation:
+Azure has a wide range of VM sizes that can address each and every one of the above application requirements, some are specific to HPC, but even the smallest sizes can be used to provide an effective grid implementation:
 
 - [HPC VM sizes][compute-hpc] Due to the CPU bound nature of rendering, Microsoft typically suggests the Azure H-Series VMs. This type of VM is built specifically for high end computational needs, they have 8 and 16 core vCPU sizes available, and features DDR4 memory, SSD temporary storage, and Haswell E5 Intel technology.
 - [GPU VM sizes][compute-gpu] GPU optimized VM sizes are specialized virtual machines available with single or multiple NVIDIA GPUs. These sizes are designed for compute-intensive, graphics-intensive, and visualization workloads.
-- NC, NCv2, NCv3, and ND sizes are optimized for compute-intensive and network-intensive applications and algorithms, including CUDA and OpenCL-based applications and simulations, AI, and Deep Learning. NV sizes are optimized and designed for remote visualization, streaming, gaming, encoding, and VDI scenarios utilizing frameworks such as OpenGL and DirectX.
+- NC, NCv2, NCv3, and ND sizes are optimized for compute-intensive and network-intensive applications and algorithms, including CUDA and OpenCL-based applications and simulations, AI, and Deep Learning. NV sizes are optimized and designed for remote visualization, streaming, gaming, encoding, and VDI scenarios using frameworks such as OpenGL and DirectX.
 - [Memory optimized VM sizes][compute-memory] When more memory is required, the memory optimized VM sizes offer a higher memory-to-CPU ratio.
 - [General purposes VM sizes][compute-general] General-purpose VM sizes are also available and provide balanced CPU-to-memory ratio.
 
@@ -110,12 +121,9 @@ The template will deploy:
 - The node pool will be configured to use A2 v2 VMs with Canonical Ubuntu images
 - The node pool will contain zero VMs initially and will require you to manually scale to add VMs
 
-<!-- markdownlint-disable MD033 -->
+Click the link below to deploy the solution.
 
-<a href="https://portal.azure.com/#create/Microsoft.Template/uri/https%3A%2F%2Fraw.githubusercontent.com%2Fmspnp%2Fsolution-architectures%2Fmaster%2Fhpc%2Fbatchcreatewithpools.json" target="_blank">
-    <img src="https://azuredeploy.net/deploybutton.png"/>
-</a>
-<!-- markdownlint-enable MD033 -->
+[![Deploy to Azure](https://azuredeploy.net/deploybutton.png)](https://portal.azure.com/#create/Microsoft.Template/uri/https%3A%2F%2Fraw.githubusercontent.com%2Fmspnp%2Fsolution-architectures%2Fmaster%2Fhpc%2Fbatchcreatewithpools.json)
 
 [Learn more about Resource Manager templates][azure-arm-templates]
 
@@ -153,33 +161,25 @@ Azure Batch also supports the use of low-priority VMs in the node pools, which c
 [Using containers on Azure Batch][batch-containers]
 
 <!-- links -->
+
 [architecture]: ./media/architecture-video-rendering.png
-[resource-groups]: /azure/azure-resource-manager/resource-group-overview
-[security]: /azure/security/
-[resiliency]: /azure/architecture/resiliency/
-[scalability]: /azure/architecture/checklist/scalability
-[vmss]: /azure/virtual-machine-scale-sets/overview
-[storage]: https://azure.microsoft.com/services/storage/
-[batch]: https://azure.microsoft.com/services/batch/
-[batch-arch]: https://azure.microsoft.com/solutions/architecture/big-compute-with-azure-batch/
-[compute-hpc]: /azure/virtual-machines/windows/sizes-hpc
-[compute-gpu]: /azure/virtual-machines/windows/sizes-gpu
-[compute-compute]: /azure/virtual-machines/windows/sizes-compute
-[compute-memory]: /azure/virtual-machines/windows/sizes-memory
-[compute-general]: /azure/virtual-machines/windows/sizes-general
-[compute-storage]: /azure/virtual-machines/windows/sizes-storage
-[compute-acu]: /azure/virtual-machines/windows/acu
-[compute=benchmark]: /azure/virtual-machines/windows/compute-benchmark-scores
+[security]: https://docs.microsoft.com/azure/security
+[vmss]: https://docs.microsoft.com/azure/virtual-machine-scale-sets/overview
+[compute-hpc]: https://docs.microsoft.com/azure/virtual-machines/windows/sizes-hpc
+[compute-gpu]: https://docs.microsoft.com/azure/virtual-machines/windows/sizes-gpu
+[compute-memory]: https://docs.microsoft.com/azure/virtual-machines/windows/sizes-memory
+[compute-general]: https://docs.microsoft.com/azure/virtual-machines/windows/sizes-general
+[compute=benchmark]: https://docs.microsoft.com/azure/virtual-machines/windows/compute-benchmark-scores
 [hpc-est-high]: https://azure.com/e/9ac25baf44ef49c3a6b156935ee9544c
 [hpc-est-med]: https://azure.com/e/0286f1d6f6784310af4dcda5aec8c893
 [hpc-est-low]: https://azure.com/e/e39afab4e71949f9bbabed99b428ba4a
 [batch-labs-masterclass]: https://github.com/azurebigcompute/BigComputeLabs/tree/master/Azure%20Batch%20Masterclass%20Labs
-[batch-scaling]: /azure/batch/batch-automatic-scaling
-[hpc-alt-solutions]: /azure/virtual-machines/linux/high-performance-computing?toc=%2fazure%2fbatch%2ftoc.json
-[batch-monitor]: /azure/batch/monitoring-overview
-[batch-pricing]: https://azure.microsoft.com/pricing/details/batch/
-[batch-doc]: /azure/batch/
-[batch-overview]: https://azure.microsoft.com/services/batch/
+[batch-scaling]: https://docs.microsoft.com/azure/batch/batch-automatic-scaling
+[hpc-alt-solutions]: https://docs.microsoft.com/azure/virtual-machines/linux/high-performance-computing
+[batch-monitor]: https://docs.microsoft.com/azure/batch/monitoring-overview
+[batch-pricing]: https://azure.microsoft.com/pricing/details/batch
+[batch-doc]: https://docs.microsoft.com/azure/batch
+[batch-overview]: https://azure.microsoft.com/services/batch
 [batch-containers]: https://github.com/Azure/batch-shipyard
-[azure-arm-templates]: /azure/azure-resource-manager/resource-group-overview#template-deployment
-[batch-plugins]: /azure/batch/batch-rendering-service#options-for-submitting-a-render-job
+[azure-arm-templates]: https://docs.microsoft.com/azure/azure-resource-manager/template-deployment-overview
+[batch-plugins]: https://docs.microsoft.com/azure/batch/batch-rendering-service#options-for-rendering-on-azure

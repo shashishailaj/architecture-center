@@ -1,18 +1,26 @@
 ---
 title: Sign-up and tenant onboarding in multitenant applications
 description: How to onboard tenants in a multitenant application.
-author: MikeWasson
+author: adamboeglin
 ms.date: 07/21/2017
-
+ms.topic: guide
+ms.service: architecture-center
+ms.category:
+  - identity
+ms.subservice: reference-architecture
 pnp.series.title: Manage Identity in Multitenant Applications
 pnp.series.prev: claims
 pnp.series.next: app-roles
 ---
+
+<!-- cSpell:ignore signup nameof -->
+
 # Tenant sign-up and onboarding
 
 [![GitHub](../_images/github.png) Sample code][sample application]
 
-This article describes how to implement a *sign-up* process in a multi-tenant application, which allows a customer to sign up their organization for your application.
+This article describes how to implement a *sign-up* process in a multitenant application, which allows a customer to sign up their organization for your application.
+
 There are several reasons to implement a sign-up process:
 
 * Allow an AD admin to consent for the customer's entire organization to use the application.
@@ -55,7 +63,7 @@ When an anonymous user visits the Surveys application, the user is shown two but
 
 These buttons invoke actions in the `AccountController` class.
 
-The `SignIn` action returns a **ChallegeResult**, which causes the OpenID Connect middleware to redirect to the authentication endpoint. This is the default way to trigger authentication in ASP.NET Core.
+The `SignIn` action returns a **ChallengeResult**, which causes the OpenID Connect middleware to redirect to the authentication endpoint. This is the default way to trigger authentication in ASP.NET Core.
 
 ```csharp
 [AllowAnonymous]
@@ -251,7 +259,7 @@ private async Task<Tenant> SignUpTenantAsync(BaseControlContext context, TenantM
 Here is a summary of the entire sign-up flow in the Surveys application:
 
 1. The user clicks the **Sign Up** button.
-2. The `AccountController.SignUp` action returns a challege result.  The authentication state includes "signup" value.
+2. The `AccountController.SignUp` action returns a challenge result.  The authentication state includes "signup" value.
 3. In the `RedirectToAuthenticationEndpoint` event, add the `admin_consent` prompt.
 4. The OpenID Connect middleware redirects to Azure AD and the user authenticates.
 5. In the `AuthenticationValidated` event, look for the "signup" state.
@@ -261,9 +269,9 @@ Here is a summary of the entire sign-up flow in the Surveys application:
 
 <!-- links -->
 
-[app roles]: app-roles.md
-[Tailspin]: tailspin.md
+[app roles]: ./app-roles.md
+[Tailspin]: ./tailspin.md
 
 [state]: https://openid.net/specs/openid-connect-core-1_0.html#AuthRequest
-[Authentication]: authenticate.md
+[Authentication]: ./authenticate.md
 [sample application]: https://github.com/mspnp/multitenant-saas-guidance

@@ -5,12 +5,13 @@ description: Load data on demand into a cache from a data store.
 keywords: design pattern
 author: dragon119
 ms.date: 11/01/2018
+ms.topic: design-pattern
+ms.service: architecture-center
+ms.subservice: cloud-fundamentals
 ms.custom: seodec18
 ---
 
 # Cache-Aside pattern
-
-[!INCLUDE [header](../_includes/header.md)]
 
 Load data on demand into a cache from a data store. This can improve performance and also helps to maintain consistency between data held in the cache and data in the underlying data store.
 
@@ -60,14 +61,14 @@ This pattern might not be suitable:
 
 ## Example
 
-In Microsoft Azure you can use Azure Redis Cache to create a distributed cache that can be shared by multiple instances of an application.
+In Microsoft Azure you can use Azure Cache for Redis to create a distributed cache that can be shared by multiple instances of an application.
 
-This following code examples use the [StackExchange.Redis](https://github.com/StackExchange/StackExchange.Redis) client, which is a Redis client library written for .NET. To connect to an Azure Redis Cache instance, call the static `ConnectionMultiplexer.Connect` method and pass in the connection string. The method returns a `ConnectionMultiplexer` that represents the connection. One approach to sharing a `ConnectionMultiplexer` instance in your application is to have a static property that returns a connected instance, similar to the following example. This approach provides a thread-safe way to initialize only a single connected instance.
+This following code examples use the [StackExchange.Redis](https://github.com/StackExchange/StackExchange.Redis) client, which is a Redis client library written for .NET. To connect to an Azure Cache for Redis instance, call the static `ConnectionMultiplexer.Connect` method and pass in the connection string. The method returns a `ConnectionMultiplexer` that represents the connection. One approach to sharing a `ConnectionMultiplexer` instance in your application is to have a static property that returns a connected instance, similar to the following example. This approach provides a thread-safe way to initialize only a single connected instance.
 
 ```csharp
 private static ConnectionMultiplexer Connection;
 
-// Redis Connection string info
+// Redis connection string information
 private static Lazy<ConnectionMultiplexer> lazyConnection = new Lazy<ConnectionMultiplexer>(() =>
 {
     string cacheConnection = ConfigurationManager.AppSettings["CacheConnection"].ToString();
@@ -117,7 +118,7 @@ public async Task<MyEntity> GetMyEntityAsync(int id)
 }
 ```
 
-> The examples use Redis Cache to access the store and retrieve information from the cache. For more information, see [Using Microsoft Azure Redis Cache](https://docs.microsoft.com/azure/redis-cache/cache-dotnet-how-to-use-azure-redis-cache) and [How to create a Web App with Redis Cache](https://docs.microsoft.com/azure/redis-cache/cache-web-app-howto)
+> The examples use Azure Cache for Redis to access the store and retrieve information from the cache. For more information, see [Using Azure Cache for Redis](https://docs.microsoft.com/azure/redis-cache/cache-dotnet-how-to-use-azure-redis-cache) and [How to create a Web App with Azure Cache for Redis](https://docs.microsoft.com/azure/redis-cache/cache-web-app-howto).
 
 The `UpdateEntityAsync` method shown below demonstrates how to invalidate an object in the cache when the value is changed by the application. The code updates the original data store and then removes the cached item from the cache.
 
@@ -142,6 +143,6 @@ public async Task UpdateEntityAsync(MyEntity entity)
 
 The following information may be relevant when implementing this pattern:
 
-- [Caching Guidance](https://docs.microsoft.com/azure/architecture/best-practices/caching). Provides additional information on how you can cache data in a cloud solution, and the issues that you should consider when you implement a cache.
+- [Caching Guidance](../best-practices/caching.md). Provides additional information on how you can cache data in a cloud solution, and the issues that you should consider when you implement a cache.
 
 - [Data Consistency Primer](https://msdn.microsoft.com/library/dn589800.aspx). Cloud applications typically use data that's spread across data stores. Managing and maintaining data consistency in this environment is a critical aspect of the system, particularly the concurrency and availability issues that can arise. This primer describes issues about consistency across distributed data, and summarizes how an application can implement eventual consistency to maintain the availability of data.

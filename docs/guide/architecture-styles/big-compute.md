@@ -2,9 +2,12 @@
 title: Big compute architecture style
 titleSuffix: Azure Application Architecture Guide
 description: Describes benefits, challenges, and best practices for Big Compute architectures on Azure.
-author: MikeWasson
+author: adamboeglin
 ms.date: 08/30/2018
-ms.custom: seojan19
+ms.topic: guide
+ms.service: architecture-center
+ms.subservice: cloud-fundamentals
+ms.custom: seojan19, HPC
 ---
 
 # Big compute architecture style
@@ -53,7 +56,7 @@ Using Azure Batch, you configure a VM pool, and upload the applications and data
 
 ## Big compute running on Virtual Machines
 
-You can use [Microsoft HPC Pack][hpc-pack] to administer a cluster of VMs, and schedule and monitor HPC jobs. With this approach, you must provision and manage the VMs and network infrastructure. Consider this approach if you have existing HPC workloads and want to move some or all it to Azure. You can move the entire HPC cluster to Azure, or keep your HPC cluster on-premises but use Azure for burst capacity. For more information, see [Batch and HPC solutions for large-scale computing workloads][batch-hpc-solutions].
+You can use [Microsoft HPC Pack][hpc-pack] to administer a cluster of VMs, and schedule and monitor HPC jobs. With this approach, you must provision and manage the VMs and network infrastructure. Consider this approach if you have existing HPC workloads and want to move some or all it to Azure. You can move the entire HPC cluster to Azure, or you can keep your HPC cluster on-premises but use Azure for burst capacity. For more information, see [Batch and HPC solutions for large-scale computing workloads][batch-hpc-solutions].
 
 ### HPC Pack deployed to Azure
 
@@ -61,7 +64,7 @@ In this scenario, the HPC cluster is created entirely within Azure.
 
 ![Diagram of HPC Pack deployed to Azure](./images/big-compute-iaas.png)
 
-The head node provides management and job scheduling services to the cluster. For tightly coupled tasks, use an RDMA network that provides very high bandwidth, low latency communication between VMs. For more information see [Deploy an HPC Pack 2016 cluster in Azure][deploy-hpc-azure].
+The head node provides management and job scheduling services to the cluster. For tightly coupled tasks, use an RDMA network that provides very high bandwidth, low latency communication between VMs. For more information, see [Deploy an HPC Pack 2016 cluster in Azure][deploy-hpc-azure].
 
 ### Burst an HPC cluster to Azure
 
@@ -71,8 +74,8 @@ In this scenario, an organization is running HPC Pack on-premises, and uses Azur
 
 <!-- links -->
 
-[batch]: /azure/batch/
-[batch-hpc-solutions]: /azure/batch/batch-hpc-solutions
-[deploy-hpc-azure]: /azure/virtual-machines/windows/hpcpack-2016-cluster
+[batch]: https://docs.microsoft.com/azure/batch
+[batch-hpc-solutions]: https://docs.microsoft.com/azure/batch/batch-hpc-solutions
+[deploy-hpc-azure]: https://docs.microsoft.com/azure/virtual-machines/windows/hpcpack-2016-cluster
 [embarrassingly-parallel]: https://en.wikipedia.org/wiki/Embarrassingly_parallel
 [hpc-pack]: https://technet.microsoft.com/library/cc514029

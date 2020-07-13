@@ -1,9 +1,15 @@
 ---
-title: Integrate on-premises Active Directory with Azure
-titleSuffix: Azure Reference Architectures
+title: Integrate on-premises AD with Azure
 description: Compare reference architectures for integrating on-premises Active Directory with Azure.
-ms.date: 07/02/2018
-ms.custom: seodec18
+author: adamboeglin
+ms.date: 07/30/2019
+ms.topic: reference-architecture
+ms.service: architecture-center
+ms.category:
+  - identity
+  - hybrid
+ms.subservice: reference-architecture
+ms.custom: seodec18, identity
 ---
 
 # Choose a solution for integrating on-premises Active Directory with Azure
@@ -16,7 +22,7 @@ Azure provides two solutions for implementing directory and identity services in
 
 - Use [Azure AD][azure-active-directory] to create an Active Directory domain in the cloud and connect it to your on-premises Active Directory domain. [Azure AD Connect][azure-ad-connect] integrates your on-premises directories with Azure AD.
 
-- Extend your existing on-premises Active Directory infrastructure to Azure, by deploying a VM in Azure that runs AD DS as a domain controller. This architecture is more common when the on-premises network and the Azure virtual network (VNet) are connected by a VPN or ExpressRoute connection. Several variations of this architecture are possible:
+- Extend your existing on-premises Active Directory infrastructure to Azure, by deploying a VM in Azure that runs AD DS as a Domain Controller. This architecture is more common when the on-premises network and the Azure virtual network (VNet) are connected by a VPN or ExpressRoute connection. Several variations of this architecture are possible:
 
   - Create a domain in Azure and join it to your on-premises AD forest.
   - Create a separate forest in Azure that is trusted by domains in your on-premises forest.
@@ -40,9 +46,9 @@ You can also use Azure AD without using an on-premises directory. In this case, 
 
 **Challenges**
 
-- Identity services are limited to users and groups. There is no ability to authenticate service and computer accounts.
 - You must configure connectivity with your on-premises domain to keep the Azure AD directory synchronized.
 - Applications may need to be rewritten to enable authentication through Azure AD.
+- If you wish to authenticate service and computer accounts, you will have to also deploy [Azure Active Directory Domain Services](https://docs.microsoft.com/azure/active-directory-domain-services/).
 
 **Reference architecture**
 
@@ -120,8 +126,7 @@ Typical uses for this architecture:
 [aad]: ./azure-ad.md
 [ad-ds]: ./adds-extend-domain.md
 [ad-ds-forest]: ./adds-forest.md
-[ad-forest-defn]: /windows/desktop/AD/forests
+[ad-forest-defn]: https://docs.microsoft.com/windows/desktop/AD/forests
 [adfs]: ./adfs.md
-
-[azure-active-directory]: /azure/active-directory-domain-services/active-directory-ds-overview
-[azure-ad-connect]: /azure/active-directory/hybrid/whatis-hybrid-identity
+[azure-active-directory]: https://docs.microsoft.com/azure/active-directory-domain-services/active-directory-ds-overview
+[azure-ad-connect]: https://docs.microsoft.com/azure/active-directory/hybrid/whatis-hybrid-identity

@@ -1,9 +1,13 @@
 ---
 title: Federate with a customer's AD FS
 description: How to federate with a customer's AD FS in a multitenant application.
-author: MikeWasson
+author: adamboeglin
 ms.date: 07/21/2017
-
+ms.topic: guide
+ms.service: architecture-center
+ms.category:
+  - identity
+ms.subservice: reference-architecture
 pnp.series.title: Manage Identity in Multitenant Applications
 pnp.series.prev: token-cache
 pnp.series.next: client-assertion
@@ -11,13 +15,13 @@ pnp.series.next: client-assertion
 
 # Federate with a customer's AD FS
 
-This article describes how a multi-tenant SaaS application can support authentication via Active Directory Federation Services (AD FS), in order to federate with a customer's AD FS.
+This article describes how a multitenant SaaS application can support authentication via Active Directory Federation Services (AD FS), in order to federate with a customer's AD FS.
 
 ## Overview
 
-Azure Active Directory (Azure AD) makes it easy to sign in users from Azure AD tenants, including Office365 and Dynamics CRM Online customers. But what about customers who use on-premise Active Directory on a corporate intranet?
+Azure Active Directory (Azure AD) makes it easy to sign in users from Azure AD tenants, including Office365 and Dynamics CRM Online customers. But what about customers who use on-premises Active Directory on a corporate intranet?
 
-One option is for these customers to sync their on-premise AD with Azure AD, using [Azure AD Connect]. However, some customers may be unable to use this approach, due to corporate IT policy or other reasons. In that case, another option is to federate through Active Directory Federation Services (AD FS).
+One option is for these customers to sync their on-premises AD with Azure AD, using [Azure AD Connect]. However, some customers may be unable to use this approach, due to corporate IT policy or other reasons. In that case, another option is to federate through Active Directory Federation Services (AD FS).
 
 To enable this scenario:
 
@@ -34,12 +38,9 @@ There are three main roles in the trust relation:
   ![Federation trust](./images/federation-trust.png)
 
 > [!NOTE]
-> In this article, we assume the application uses OpenID connect as the authentication protocol. Another option is to use WS-Federation.
+> In this article, we assume the application uses OpenID Connect as the authentication protocol. Another option is to use WS-Federation.
 >
 > For OpenID Connect, the SaaS provider must use AD FS 2016, running in Windows Server 2016. AD FS 3.0 does not support OpenID Connect.
->
-> ASP.NET Core does not include out-of-the-box support for WS-Federation.
->
 >
 
 For an example of using WS-Federation with ASP.NET 4, see the [active-directory-dotnet-webapp-wsfederation sample][active-directory-dotnet-webapp-wsfederation].
@@ -53,7 +54,7 @@ For an example of using WS-Federation with ASP.NET 4, see the [active-directory-
 
 ## Limitations
 
-By default, the relying party application receives only a fixed set of claims available in the id_token, shown in the following table. With AD FS 2016, you can customize the id_token in OpenID Connect scenarios. For more information, see [Custom ID Tokens in AD FS](/windows-server/identity/ad-fs/development/customize-id-token-ad-fs-2016).
+By default, the relying party application receives only a fixed set of claims available in the id_token, shown in the following table. With AD FS 2016, you can customize the id_token in OpenID Connect scenarios. For more information, see [Custom ID Tokens in AD FS](https://docs.microsoft.com/windows-server/identity/ad-fs/development/customize-id-token-ad-fs-2016).
 
 | Claim | Description |
 | --- | --- |
@@ -76,25 +77,25 @@ The rest of this article describes how to set up the trust relationship between 
 
 ## AD FS deployment
 
-The SaaS provider can deploy AD FS either on-premise or on Azure VMs. For security and availability, the following guidelines are important:
+The SaaS provider can deploy AD FS either on-premises or on Azure VMs. For security and availability, the following guidelines are important:
 
 * Deploy at least two AD FS servers and two AD FS proxy servers to achieve the best availability of the AD FS service.
 * Domain controllers and AD FS servers should never be exposed directly to the Internet and should be in a virtual network with direct access to them.
 * Web application proxies (previously AD FS proxies) must be used to publish AD FS servers to the Internet.
 
-To set up a similar topology in Azure requires the use of Virtual networks, NSG’s, azure VM’s and availability sets. For more details, see [Guidelines for Deploying Windows Server Active Directory on Azure Virtual Machines][active-directory-on-azure].
+To set up a similar topology in Azure requires the use of virtual networks, network security groups, virtual machines, and availability sets. For more details, see [Guidelines for deploying Windows Server Active Directory on Azure Virtual Machines][active-directory-on-azure].
 
 ## Configure OpenID Connect authentication with AD FS
 
-The SaaS provider must enable OpenID Connect between the application and AD FS. To do so, add an application group in AD FS.  You can find detailed instructions in this [blog post], under " Setting up a Web App for OpenId Connect sign in AD FS."
+The SaaS provider must enable OpenID Connect between the application and AD FS. To do so, add an application group in AD FS.  You can find detailed instructions in this [blog post], under "Setting up a Web App for OpenId Connect sign in AD FS."
 
 Next, configure the OpenID Connect middleware. The metadata endpoint is `https://domain/adfs/.well-known/openid-configuration`, where domain is the SaaS provider's AD FS domain.
 
-Typically you might combine this with other OpenID Connect endpoints (such as AAD). You'll need two different sign-in buttons or some other way to distinguish them, so that the user is sent to the correct authentication endpoint.
+Typically you might combine this with other OpenID Connect endpoints (such as Azure AD). You'll need two different sign-in buttons or some other way to distinguish them, so that the user is sent to the correct authentication endpoint.
 
 ## Configure the AD FS Resource Partner
 
-The SaaS provider must do the following for each customer that wants to connect via ADFS:
+The SaaS provider must do the following for each customer that wants to connect via AD FS:
 
 1. Add a claims provider trust.
 2. Add claims rules.
@@ -129,7 +130,7 @@ Here are the steps in more detail.
 Run the following PowerShell script:
 
 ```powershell
-Set-ADFSClaimsProviderTrust -TargetName "name" -OrganizationalAccountSuffix @("suffix")
+Set-AdfsClaimsProviderTrust -TargetName "name" -OrganizationalAccountSuffix @("suffix")
 ```
 
 where "name" is the friendly name of the claims provider trust, and "suffix" is the UPN suffix for the customer's AD (example, "corp.fabrikam.com").
@@ -186,7 +187,7 @@ The customer must do the following:
 
 <!-- links -->
 
-[Azure AD Connect]: /azure/active-directory/hybrid/whatis-hybrid-identity
+[Azure AD Connect]: https://docs.microsoft.com/azure/active-directory/hybrid/whatis-hybrid-identity
 [federation trust]: https://technet.microsoft.com/library/cc770993(v=ws.11).aspx
 [account partner]: https://technet.microsoft.com/library/cc731141(v=ws.11).aspx
 [resource partner]: https://technet.microsoft.com/library/cc731141(v=ws.11).aspx
@@ -194,8 +195,8 @@ The customer must do the following:
 [Expiration time]: https://tools.ietf.org/html/draft-ietf-oauth-json-web-token-25#section-4.1.
 [Name identifier]: https://msdn.microsoft.com/library/system.security.claims.claimtypes.nameidentifier(v=vs.110).aspx
 [active-directory-on-azure]: https://msdn.microsoft.com/library/azure/jj156090.aspx
-[blog post]: https://www.cloudidentity.com/blog/2015/08/21/OPENID-CONNECT-WEB-SIGN-ON-WITH-ADFS-IN-WINDOWS-SERVER-2016-TP3/
+[blog post]: https://www.cloudidentity.com/blog/2015/08/21/openid-connect-web-sign-on-with-adfs-in-windows-server-2016-tp3
 [Customizing the AD FS Sign-in Pages]: https://technet.microsoft.com/library/dn280950.aspx
 [sample application]: https://github.com/mspnp/multitenant-saas-guidance
-[client assertion]: client-assertion.md
+[client assertion]: ./client-assertion.md
 [active-directory-dotnet-webapp-wsfederation]: https://github.com/Azure-Samples/active-directory-dotnet-webapp-wsfederation

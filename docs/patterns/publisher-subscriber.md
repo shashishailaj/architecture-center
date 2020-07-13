@@ -4,11 +4,14 @@ description: Enable an application to announce events to multiple interested con
 keywords: design pattern
 author: alexbuckgit
 ms.date: 12/07/2018
+ms.topic: design-pattern
+ms.service: architecture-center
+ms.subservice: cloud-fundamentals
 ---
 
 # Publisher-Subscriber pattern
 
-Enable an application to announce events to multiple interested consumers aynchronously, without coupling the senders to the receivers.
+Enable an application to announce events to multiple interested consumers asynchronously, without coupling the senders to the receivers.
 
 **Also called**: Pub/sub messaging
 
@@ -29,12 +32,12 @@ Introduce an asynchronous messaging subsystem that includes the following:
 
 - One output messaging channel per consumer. The consumers are known as *subscribers*.
 
-- A mechanism for copying each message from the input channel to the output channels for all subscribers interested in that message. This operation is typically handled by a intermediary such as a message broker or event bus.
+- A mechanism for copying each message from the input channel to the output channels for all subscribers interested in that message. This operation is typically handled by an intermediary such as a message broker or event bus.
 
 The following diagram shows the logical components of this pattern:
 
 ![Publish-subscribe pattern using a message broker](./_images/publish-subscribe.png)
- 
+
 Pub/sub messaging has the following benefits:
 
 - It decouples subsystems that still need to communicate. Subsystems can be managed independently, and messages can be properly managed even if one or more receivers are offline.
@@ -51,13 +54,13 @@ Pub/sub messaging has the following benefits:
 
 - It improves testability. Channels can be monitored and messages can be inspected or logged as part of an overall integration test strategy.
 
-- It provides separation of concerns for your applications. Each application can focus on its core capabilities, while the messaging infrastructure handles everything required to reliably route messages to multiple consumers. 
+- It provides separation of concerns for your applications. Each application can focus on its core capabilities, while the messaging infrastructure handles everything required to reliably route messages to multiple consumers.
 
 ## Issues and considerations
 
 Consider the following points when deciding how to implement this pattern:
 
-- **Existing technologies.** It is strongly recommended to use available messaging products and services that support a publish-subscribe model, rather than building your own. In Azure, consider using [Service Bus](/azure/service-bus-messaging/) or [Event Grid](/azure/event-grid/). Other technologies that can be used for pub/sub messaging include Redis, RabbitMQ, and Apache Kafka.
+- **Existing technologies.** It is strongly recommended to use available messaging products and services that support a publish-subscribe model, rather than building your own. In Azure, consider using [Service Bus](https://docs.microsoft.com/azure/service-bus-messaging/) or [Event Grid](https://docs.microsoft.com/azure/event-grid/). Other technologies that can be used for pub/sub messaging include Redis, RabbitMQ, and Apache Kafka.
 
 - **Subscription handling.** The messaging infrastructure must provide mechanisms that consumers can use to subscribe to or unsubscribe from available channels.
 
@@ -70,7 +73,7 @@ Consider the following points when deciding how to implement this pattern:
 
 - **Wildcard subscribers.** Consider allowing subscribers to subscribe to multiple topics via wildcards.
 
-- **Bi-directional communication.** The channels in a publish-subscribe system are treated as unidirectional. If a specific subscriber needs to send acknowledgement or communicate status back to the publisher, consider using the [Request/Reply Pattern](http://www.enterpriseintegrationpatterns.com/patterns/messaging/RequestReply.html). This pattern uses one channel to send a message to the subscriber, and a separate reply channel for communicating back to the publisher.
+- **Bi-directional communication.** The channels in a publish-subscribe system are treated as unidirectional. If a specific subscriber needs to send acknowledgment or communicate status back to the publisher, consider using the [Request/Reply Pattern](http://www.enterpriseintegrationpatterns.com/patterns/messaging/RequestReply.html). This pattern uses one channel to send a message to the subscriber, and a separate reply channel for communicating back to the publisher.
 
 - **Message ordering.** The order in which consumer instances receive messages isn't guaranteed, and doesn't necessarily reflect the order in which the messages were created. Design the system to ensure that message processing is idempotent to help eliminate any dependency on the order of message handling.
 
@@ -80,7 +83,7 @@ Consider the following points when deciding how to implement this pattern:
 
 - **Repeated messages.** The same message might be sent more than once. For example, the sender might fail after posting a message. Then a new instance of the sender might start up and repeat the message. The messaging infrastructure should implement duplicate message detection and removal (also known as de-duping) based on message IDs in order to provide at-most-once delivery of messages.
 
-- **Message expiration.** A message might have a limited lifetime. If it isn't processed within this period, it might no longer be relevant and should be discarded. A sender can specify an experiation time as part of the data in the message. A receiver can examine this information before deciding whether to perform the business logic associated with the message.
+- **Message expiration.** A message might have a limited lifetime. If it isn't processed within this period, it might no longer be relevant and should be discarded. A sender can specify an expiration time as part of the data in the message. A receiver can examine this information before deciding whether to perform the business logic associated with the message.
 
 - **Message scheduling.** A message might be temporarily embargoed and should not be processed until a specific date and time. The message should not be available to a receiver until this time.
 
@@ -106,7 +109,7 @@ This pattern might not be useful when:
 
 ## Example
 
-The following diagram shows an enterprise integration architecture that uses Service Bus to coordinate workflows, and Event Grid notify subsystems of events that occur. 
+The following diagram shows an enterprise integration architecture that uses Service Bus to coordinate workflows, and Event Grid to notify subsystems of events that occur.
 For more information, see [Enterprise integration on Azure using message queues and events](../reference-architectures/enterprise-integration/queues-events.md).
 
 ![Enterprise integration architecture](../reference-architectures/enterprise-integration/_images/enterprise-integration-queues-events.png)
@@ -115,7 +118,7 @@ For more information, see [Enterprise integration on Azure using message queues 
 
 The following patterns and guidance might be relevant when implementing this pattern:
 
-- [Choose between Azure services that deliver messages](/azure/event-grid/compare-messaging-services).
+- [Choose between Azure services that deliver messages](https://docs.microsoft.com/azure/event-grid/compare-messaging-services).
 
 - The [Event-driven architecture style](../guide/architecture-styles/event-driven.md) is an architecture style that uses pub/sub messaging.
 
@@ -123,4 +126,4 @@ The following patterns and guidance might be relevant when implementing this pat
 
 - [Observer Pattern](https://en.wikipedia.org/wiki/Observer_pattern). The Publish-Subscribe pattern builds on the Observer pattern by decoupling subjects from observers via asynchronous messaging.
 
-- [Message Broker Pattern](https://en.wikipedia.org/wiki/Message_broker). Many messaging subsystems that support a publish-subscribe modek are implemented via a message broker.
+- [Message Broker Pattern](https://en.wikipedia.org/wiki/Message_broker). Many messaging subsystems that support a publish-subscribe model are implemented via a message broker.

@@ -4,7 +4,17 @@ titleSuffix: Azure Example Scenarios
 description: Provide a world-class search experience in an e-commerce application.
 author: jelledruyts
 ms.date: 09/14/2018
-ms.custom: fasttrack
+ms.category:
+  - web
+  - analytics
+ms.topic: example-scenario
+ms.service: architecture-center
+ms.subservice: example-scenario
+ms.custom:
+  - fasttrack
+  - ecommerce
+  - web-app
+social_image_url: /azure/architecture/example-scenario/apps/media/architecture-ecommerce-search.png
 ---
 
 # Intelligent product search engine for e-commerce
@@ -42,19 +52,19 @@ This scenario covers an e-commerce solution where customers can search through a
 
 - [App Services - Web Apps][docs-webapps] hosts web applications allowing autoscale and high availability without having to manage infrastructure.
 - [SQL Database][docs-sql-database] is a general-purpose relational database-managed service in Microsoft Azure that supports structures such as relational data, JSON, spatial, and XML.
-- [Azure Search][docs-search] is a search-as-a-service cloud solution that provides a rich search experience over private, heterogenous content in web, mobile, and enterprise applications.
+- [Azure Search][docs-search] is a search-as-a-service cloud solution that provides a rich search experience over private, heterogeneous content in web, mobile, and enterprise applications.
 - [Bot Service][docs-botservice] provides tools to build, test, deploy, and manage intelligent bots.
 - [Cognitive Services][docs-cognitive] lets you use intelligent algorithms to see, hear, speak, understand, and interpret your user needs through natural methods of communication.
 
 ### Alternatives
 
 - You could use **in-database search** capabilities, for example, through SQL Server full-text search, but then your transactional store also processes queries (increasing the need for processing power) and the search capabilities inside the database are more limited.
-- You could host the open-source [Apache Lucene][apache-lucene] (on which Azure Search is built upon) on Azure Virtual Machines, but then you are back to managing Infrastructure-as-a-Service (IaaS) and don't benefit from the many features that Azure Search provides on top of Lucene.
+- You could host the open-source [Apache Lucene][apache-lucene] (on which Azure Search is built) on Azure Virtual Machines, but then you are back to managing Infrastructure-as-a-Service (IaaS) and don't benefit from the many features that Azure Search provides on top of Lucene.
 - You could also consider deploying [Elastic Search][elastic-marketplace] from the Azure Marketplace, which is an alternative and capable search product from a third-party vendor, but also in this case you are running an IaaS workload.
 
 Other options for the data tier include:
 
-- [Cosmos DB](/azure/cosmos-db/introduction) - Microsoft's globally distributed, multi-model database. Costmos DB provides a platform to run other data models such as Mongo DB, Cassandra, Graph data, or simple table storage. Azure Search also supports indexing the data from Cosmos DB directly.
+- [Cosmos DB](https://docs.microsoft.com/azure/cosmos-db/introduction) - Microsoft's globally distributed, multi-model database. Costmos DB provides a platform to run other data models such as Mongo DB, Cassandra, Graph data, or simple table storage. Azure Search also supports indexing the data from Cosmos DB directly.
 
 ## Considerations
 
@@ -106,25 +116,25 @@ To learn more about Azure Search, visit the [documentation center][docs-search],
 
 <!-- links -->
 [architecture]: ./media/architecture-ecommerce-search.png
-[docs-sql-fts]: /sql/relational-databases/search/query-with-full-text-search
-[docs-search]: /azure/search/search-what-is-azure-search
-[docs-sql-database]: /azure/sql-database/sql-database-technical-overview
-[docs-webapps]: /azure/app-service/app-service-web-overview
-[docs-botservice]: /azure/bot-service/
-[docs-cognitive]: /azure/cognitive-services/
-[apache-lucene]: https://lucene.apache.org/
+[docs-sql-fts]: https://docs.microsoft.com/sql/relational-databases/search/query-with-full-text-search
+[docs-search]: https://docs.microsoft.com/azure/search/search-what-is-azure-search
+[docs-sql-database]: https://docs.microsoft.com/azure/sql-database/sql-database-technical-overview
+[docs-webapps]: https://docs.microsoft.com/azure/app-service/app-service-web-overview
+[docs-botservice]: https://docs.microsoft.com/azure/bot-service
+[docs-cognitive]: https://docs.microsoft.com/azure/cognitive-services
+[apache-lucene]: https://lucene.apache.org
 [elastic-marketplace]: https://azuremarketplace.microsoft.com/marketplace/apps/elastic.elasticsearch
 [end-to-end-walkthrough]: https://github.com/Azure/fta-customerfacingapps/tree/master/ecommerce/articles
 [search-sla]: https://go.microsoft.com/fwlink/?LinkId=716855
-[search-tier]: /azure/search/search-sku-tier
-[search-capacity]: /azure/search/search-capacity-planning
-[search-security]: /azure/search/search-security-overview
-[search-analysis]: /azure/search/search-traffic-analytics
-[search-languages]: /rest/api/searchservice/language-support
-[search-analyzers]: /rest/api/searchservice/custom-analyzers-in-azure-search
-[search-scoring]: /rest/api/searchservice/add-scoring-profiles-to-a-search-index
+[search-tier]: https://docs.microsoft.com/azure/search/search-sku-tier
+[search-capacity]: https://docs.microsoft.com/azure/search/search-capacity-planning
+[search-security]: https://docs.microsoft.com/azure/search/search-security-overview
+[search-analysis]: https://docs.microsoft.com/azure/search/search-traffic-analytics
+[search-languages]: https://docs.microsoft.com/rest/api/searchservice/language-support
+[search-analyzers]: https://docs.microsoft.com/rest/api/searchservice/custom-analyzers-in-azure-search
+[search-scoring]: https://docs.microsoft.com/rest/api/searchservice/add-scoring-profiles-to-a-search-index
 [search-samples]: https://azure.microsoft.com/resources/samples/?service=search&sort=0
-[search-demo]: https://azjobsdemo.azurewebsites.net/
+[search-demo]: https://azjobsdemo.azurewebsites.net
 [small-pricing]: https://azure.com/e/db2672a55b6b4d768ef0060a8d9759bd
 [medium-pricing]: https://azure.com/e/a5ad0706c9e74add811e83ef83766a1c
 [large-pricing]: https://azure.com/e/57f95a898daa487795bd305599973ee6

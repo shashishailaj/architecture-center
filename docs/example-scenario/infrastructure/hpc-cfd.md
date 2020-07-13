@@ -4,7 +4,16 @@ titleSuffix: Azure Example Scenarios
 description: Execute computational fluid dynamics (CFD) simulations on Azure.
 author: mikewarr
 ms.date: 09/20/2018
-ms.custom: fasttrack
+ms.category:
+  - compute
+  - storage
+ms.topic: example-scenario
+ms.service: architecture-center
+ms.subservice: example-scenario
+ms.custom:
+  - fasttrack
+  - hpc
+social_image_url: /azure/architecture/example-scenario/infrastructure/media/architecture-hpc-cfd.png
 ---
 
 # Running computational fluid dynamics (CFD) simulations on Azure
@@ -45,9 +54,9 @@ This diagram shows a high-level overview of a typical hybrid design providing jo
 - [Azure CycleCloud][cyclecloud] a tool for creating, managing, operating, and optimizing HPC and Big Compute clusters in Azure.
 - [Avere vFXT on Azure][avere] is used to provide an enterprise-scale clustered file system built for the cloud.
 - [Azure Virtual Machines (VMs)][vms] are used to create a static set of compute instances.
-- [Virtual Machine Scale Sets (virtual machine scale set)][vmss] provide a group of identical VMs capable of being scaled up or down by Azure CycleCloud.
-- [Azure Storage accounts](/azure/storage/common/storage-introduction) are used for synchronization and data retention.
-- [Virtual Networks](/azure/virtual-network/virtual-networks-overview) enable many types of Azure resources, such as Azure Virtual Machines (VMs), to securely communicate with each other, the internet, and on-premises networks.
+- [Virtual machine scale sets][vmss] provide a group of identical VMs capable of being scaled up or down by Azure CycleCloud.
+- [Azure Storage accounts](https://docs.microsoft.com/azure/storage/common/storage-introduction) are used for synchronization and data retention.
+- [Virtual Networks](https://docs.microsoft.com/azure/virtual-network/virtual-networks-overview) enable many types of Azure resources, such as Azure Virtual Machines (VMs), to securely communicate with each other, the internet, and on-premises networks.
 
 ### Alternatives
 
@@ -68,22 +77,20 @@ For general guidance on designing secure solutions, see the [Azure security docu
 Follow these steps before deploying the Resource Manager template:
 
 1. Create a [service principal][cycle-svcprin] for retrieving the appId, displayName, name, password, and tenant.
-2. Generate an [SSH key pair][cycle-ssh] to sign in securely to the CycleCloud server.
 
-    <!-- markdownlint-disable MD033 -->
+1. Generate an [SSH key pair][cycle-ssh] to sign in securely to the CycleCloud server.
 
-    <a href="https://portal.azure.com/#create/Microsoft.Template/uri/https%3A%2F%2Fraw.githubusercontent.com%2FCycleCloudCommunity%2Fcyclecloud_arm%2Fmaster%2Fazuredeploy.json" target="_blank">
-        <img src="https://azuredeploy.net/deploybutton.png"/>
-    </a>
+1. Click the link below to deploy the solution.
 
-    <!-- markdownlint-enable MD033 -->
+    [![Deploy to Azure](https://azuredeploy.net/deploybutton.png)](https://portal.azure.com/#create/Microsoft.Template/uri/https%3A%2F%2Fraw.githubusercontent.com%2FCycleCloudCommunity%2Fcyclecloud_arm%2Fmaster%2Fazuredeploy.json)
 
-3. [Log into the CycleCloud server][cycle-login] to configure and create a new cluster.
-4. [Create a cluster][cycle-create].
+1. [Log into the CycleCloud server][cycle-login] to configure and create a new cluster.
+
+1. [Create a cluster][cycle-create].
 
 The Avere Cache is an optional solution that can drastically increase read throughput for the application job data. Avere vFXT for Azure solves the problem of running these enterprise HPC applications in the cloud while leveraging data stored on-premises or in Azure Blob storage.
 
-For organizations that are planning for a hybrid infrastructure with both on-premises storage and cloud computing, HPC applications can “burst” into Azure using data stored in NAS devices and spin up virtual CPUs as needed. The data set is never moved completely into the cloud. The requested bytes are temporarily cached using an Avere cluster during processing.
+For organizations that are planning for a hybrid infrastructure with both on-premises storage and cloud computing, HPC applications can "burst" into Azure using data stored in NAS devices and spin up virtual CPUs as needed. The data set is never moved completely into the cloud. The requested bytes are temporarily cached using an Avere cluster during processing.
 
 To set up and configure an Avere vFXT installation, follow the [Avere Setup and Configuration guide][avere].
 
@@ -102,7 +109,7 @@ This scenario shows how CFD applications can be run in Azure, so the machines wi
 
 Review this [price estimate][pricing] for the hardware listed above.
 
-## Next Steps
+## Next steps
 
 Once you've deployed the sample, learn more about [Azure CycleCloud][cyclecloud].
 
@@ -113,27 +120,18 @@ Once you've deployed the sample, learn more about [Azure CycleCloud][cyclecloud]
 
 <!-- links -->
 [architecture]: ./media/architecture-hpc-cfd.png
-[calculator]: https://azure.com/e/
-[availability]: /azure/architecture/checklist/availability
-[resource-groups]: /azure/azure-resource-manager/resource-group-overview
-[resiliency]: /azure/architecture/resiliency/
-[security]: /azure/security/
-[scalability]: /azure/architecture/checklist/scalability
-[vmss]: /azure/virtual-machine-scale-sets/overview
-[cyclecloud]: /azure/cyclecloud/
-[rdma]: /azure/virtual-machines/windows/sizes-hpc#rdma-capable-instances
-[gpu]: /azure/virtual-machines/windows/sizes-gpu
-[hpcsizes]: /azure/virtual-machines/windows/sizes-hpc
-[vms]: /azure/virtual-machines/
-[low-pri]: /azure/virtual-machine-scale-sets/virtual-machine-scale-sets-use-low-priority
-[batch]: /azure/batch/
+[security]: https://docs.microsoft.com/azure/security
+[vmss]: https://docs.microsoft.com/azure/virtual-machine-scale-sets/overview
+[cyclecloud]: https://docs.microsoft.com/azure/cyclecloud
+[rdma]: https://docs.microsoft.com/azure/virtual-machines/windows/sizes-hpc#rdma-capable-instances
+[vms]: https://docs.microsoft.com/azure/virtual-machines
+[batch]: https://docs.microsoft.com/azure/batch
 [avere]: https://github.com/Azure/Avere/blob/master/README.md
-[cycle-prereq]: /azure/cyclecloud/quickstart-install-cyclecloud#prerequisites
-[cycle-svcprin]: /azure/cyclecloud/quickstart-install-cyclecloud#service-principal
-[cycle-ssh]: /azure/cyclecloud/quickstart-install-cyclecloud#ssh-keypair
-[cycle-login]: /azure/cyclecloud/quickstart-install-cyclecloud#log-into-the-cyclecloud-application-server
-[cycle-create]: /azure/cyclecloud/quickstart-create-and-run-cluster
-[rdma]: /azure/virtual-machines/windows/sizes-hpc#rdma-capable-instances
-[rdma-custom]: /azure/virtual-machines/linux/classic/rdma-cluster#customize-the-vm
+[cycle-svcprin]: https://docs.microsoft.com/azure/cyclecloud/quickstart-install-cyclecloud#service-principal
+[cycle-ssh]: https://docs.microsoft.com/azure/cyclecloud/quickstart-install-cyclecloud#ssh-keypair
+[cycle-login]: https://docs.microsoft.com/azure/cyclecloud/quickstart-install-cyclecloud#log-into-the-cyclecloud-application-server
+[cycle-create]: https://docs.microsoft.com/azure/cyclecloud/quickstart-create-and-run-cluster
+[rdma]: https://docs.microsoft.com/azure/virtual-machines/windows/sizes-hpc#rdma-capable-instances
+[rdma-custom]: https://docs.microsoft.com/azure/virtual-machines/linux/sizes-hpc#rdma-capable-instances
 [pricing]: https://azure.com/e/53030a04a2ab47a289156e2377a4247a
-[cycle-scale]: /azure/cyclecloud/autoscale
+[cycle-scale]: https://docs.microsoft.com/azure/cyclecloud/autoscale

@@ -1,8 +1,12 @@
 ---
 title: Choosing a cognitive services technology
-description: 
+description: Learn about Microsoft cognitive services that you can use in artificial intelligence applications and data flows.
 author: zoinerTejada
 ms.date: 02/12/2018
+ms.topic: guide
+ms.service: architecture-center
+ms.subservice: cloud-fundamentals
+ms.custom: AI
 ---
 
 # Choosing a Microsoft cognitive services technology
@@ -40,7 +44,7 @@ In Azure, there are dozens of Cognitive Services available. The current listing 
 
 - [Vision](https://azure.microsoft.com/services/cognitive-services/directory/vision/)
 - [Speech](https://azure.microsoft.com/services/cognitive-services/directory/speech/)
-- [Knowledge](https://azure.microsoft.com/services/cognitive-services/directory/know/)
+- [Decision](https://azure.microsoft.com/services/cognitive-services/directory/decision/)
 - [Search](https://azure.microsoft.com/services/cognitive-services/directory/search/)
 - [Language](https://azure.microsoft.com/services/cognitive-services/directory/lang/)
 
@@ -58,7 +62,7 @@ The following tables summarize the key differences in capabilities.
 
 ### Uses prebuilt models
 
-|                                                   |             Input type              |                                                                                Key benefit                                                                                |
+| Capability |             Input type              |                                                                                Key benefit                                                                                |
 |---------------------------------------------------|-------------------------------------|---------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
 |                Text Analytics API                 |                Text                 |                                                       Evaluate sentiment and topics to understand what users want.                                                        |
 |                Entity Linking API                 |                Text                 |                                               Power your app's data links with named entity recognition and disambiguation.                                               |
@@ -88,7 +92,7 @@ The following tables summarize the key differences in capabilities.
 
 ### Trained with custom data you provide
 
-| | Input type | Key benefit |
+| Capability | Input type | Key benefit |
 | --- | --- | --- |
 | Custom Vision Service | Images (or frames from video) | Customize your own computer vision models. |
 | Custom Speech Service | Speech | Overcome speech recognition barriers like speaking style, background noise, and vocabulary. |

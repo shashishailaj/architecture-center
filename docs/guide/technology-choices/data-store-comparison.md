@@ -2,8 +2,14 @@
 title: Criteria for choosing a data store
 titleSuffix: Azure Application Architecture Guide
 description: Overview of Azure compute options.
-author: MikeWasson
+author: adamboeglin
 ms.date: 06/01/2018
+ms.topic: guide
+ms.service: architecture-center
+ms.category:
+  - storage
+  - databases
+ms.subservice: reference-architecture
 ms.custom: seojan19
 ---
 
@@ -53,7 +59,7 @@ To start your comparison, gather as much of the following information as you can
 
 - **Region availability**. For managed services, is the service available in all Azure regions? Does your solution need to be hosted in certain Azure regions?
 
-- **Portability**. Will your data need to migrated to on-premises, external datacenters, or other cloud hosting environments?
+- **Portability**. Will your data need to be migrated to on-premises, external datacenters, or other cloud hosting environments?
 
 - **Licensing**. Do you have a preference of a proprietary versus OSS license type? Are there any other external restrictions on what type of license you can use?
 
@@ -161,7 +167,7 @@ The following sections compare various data store models in terms of workload pr
             <li>Operations data</li>
             <li>Inventory management</li>
             <li>Transaction history data</li>
-            <li>Materialized view of other NoSQL stores. Replaces file/BLOB indexing.</li>
+            <li>Materialized view of other NoSQL stores. Replaces file and Blob indexing.</li>
         </ul>
     </td>
 </tr>
@@ -185,7 +191,7 @@ The following sections compare various data store models in terms of workload pr
     <td>
         <ul>
             <li>Data size tends to be large.</li>
-            <li>Each key is associated with a single value, which is an unmanaged data BLOB.</li>
+            <li>Each key is associated with a single value, which is an unmanaged data Blob.</li>
             <li>There is no schema enforcement.</li>
             <li>No relationships between entities.</li>
         </ul>
@@ -363,7 +369,7 @@ The following sections compare various data store models in terms of workload pr
 <tr><td><strong>Data type</strong></td>
     <td>
         <ul>
-            <li>A time stamp that is used as the primary key and sorting mechanism.</li>
+            <li>A timestamp that is used as the primary key and sorting mechanism.</li>
             <li>Measurements from the entry or descriptions of what the entry represents.</li>
             <li>Tags that define additional information about the type, origin, and other information about the entry.</li>
         </ul>

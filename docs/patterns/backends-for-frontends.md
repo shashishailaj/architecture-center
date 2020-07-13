@@ -5,6 +5,9 @@ description: Create separate backend services to be consumed by specific fronten
 keywords: design pattern
 author: dragon119
 ms.date: 06/23/2017
+ms.topic: design-pattern
+ms.service: architecture-center
+ms.subservice: cloud-fundamentals
 ms.custom: seodec18
 ---
 
@@ -26,7 +29,7 @@ As the development activity focuses on the backend service, a separate team may 
 
 ## Solution
 
-Create one backend per user interface. Fine tune the behavior and performance of each backend to best match the needs of the frontend environment, without worrying about affecting other frontend experiences.
+Create one backend per user interface. Fine-tune the behavior and performance of each backend to best match the needs of the frontend environment, without worrying about affecting other frontend experiences.
 
 ![Diagram of the Backends for Frontends pattern](./_images/backend-for-frontend-example.png)
 
@@ -59,6 +62,7 @@ This pattern may not be suitable:
 
 ## Related guidance
 
+- [Pattern: Backends For Frontends](https://samnewman.io/patterns/architectural/bff/)
 - [Gateway Aggregation pattern](./gateway-aggregation.md)
 - [Gateway Offloading pattern](./gateway-offloading.md)
 - [Gateway Routing pattern](./gateway-routing.md)

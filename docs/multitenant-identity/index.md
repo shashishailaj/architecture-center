@@ -1,8 +1,13 @@
 ---
 title: Identity management for multitenant applications
 description: Best practices for authentication, authorization, and identity management in multitenant apps.
-author: MikeWasson
+author: adamboeglin
 ms.date: 07/21/2017
+ms.topic: guide
+ms.service: architecture-center
+ms.category:
+  - identity
+ms.subservice: reference-architecture
 ---
 
 # Manage identity in multitenant applications
@@ -19,7 +24,7 @@ When you're building a multitenant application, one of the first challenges is m
 
 Azure Active Directory (Azure AD) has some great features that support all of these scenarios.
 
-To accompany this series of articles, we created a complete [end-to-end implementation][sample-application] of a multitenant application. The articles reflect what we learned in the process of building the application. To get started with the application, see [Run the Surveys application][running-the-app].
+To accompany this series of articles, we created a complete [end-to-end implementation][sample-application] of a multitenant application. The articles reflect what we learned in the process of building the application. To get started with the application, see the [GitHub readme](https://github.com/mspnp/multitenant-saas-guidance/blob/master/get-started.md).
 
 ## Introduction
 
@@ -36,7 +41,7 @@ Example: Tailspin sells subscriptions to its SaaS application. Contoso and Fabri
 - Alice *should* have access to Contoso data.
 - Alice *should not* have access to Fabrikam data.
 
-This guidance will show you how to manage user identities in a multitenant application, using [Azure Active Directory (Azure AD)](/azure/active-directory) to handle sign-in and authentication.
+This guidance will show you how to manage user identities in a multitenant application, using [Azure Active Directory (Azure AD)](https://docs.microsoft.com/azure/active-directory) to handle sign-in and authentication.
 
 <!-- markdownlint-disable MD026 -->
 
@@ -56,11 +61,11 @@ Compare this architecture with a single-tenant architecture, where each tenant h
 
 ### Multitenancy and horizontal scaling
 
-To achieve scale in the cloud, it’s common to add more physical instances. This is known as *horizontal scaling* or *scaling out*. Consider a web app. To handle more traffic, you can add more server VMs and put them behind a load balancer. Each VM runs a separate physical instance of the web app.
+To achieve scale in the cloud, it's common to add more physical instances. This is known as *horizontal scaling* or *scaling out*. Consider a web app. To handle more traffic, you can add more server VMs and put them behind a load balancer. Each VM runs a separate physical instance of the web app.
 
 ![Load balancing a web site](./images/load-balancing.png)
 
-Any request can be routed to any instance. Together, the system functions as a single logical instance. You can tear down a VM or spin up a new VM, without affecting users. In this architecture, each physical instance is multi-tenant, and you scale by adding more instances. If one instance goes down, it should not affect any tenant.
+Any request can be routed to any instance. Together, the system functions as a single logical instance. You can tear down a VM or spin up a new VM, without affecting users. In this architecture, each physical instance is multitenant, and you scale by adding more instances. If one instance goes down, it should not affect any tenant.
 
 ## Identity in a multitenant app
 
@@ -77,14 +82,12 @@ In a multitenant app, you must consider users in the context of tenants.
 - When authorizing a user's actions (say, viewing a resource), the app must take into account the user's tenant.
 - Users might be assigned roles within the application, such as "Admin" or "Standard User". Role assignments should be managed by the customer, not by the SaaS provider.
 
-**Example.** Alice, an employee at Contoso, navigates to the application in her browser and clicks the “Log in” button. She is redirected to a login screen where she enters her corporate credentials (username and password). At this point, she is logged into the app as `alice@contoso.com`. The application also knows that Alice is an admin user for this application. Because she is an admin, she can see a list of all the resources that belong to Contoso. However, she cannot view Fabrikam's resources, because she is an admin only within her tenant.
+**Example.** Alice, an employee at Contoso, navigates to the application in her browser and clicks the "Log in" button. She is redirected to a sign-in screen where she enters her corporate credentials (username and password). At this point, she is logged into the app as `alice@contoso.com`. The application also knows that Alice is an admin user for this application. Because she is an admin, she can see a list of all the resources that belong to Contoso. However, she cannot view Fabrikam's resources, because she is an admin only within her tenant.
 
 In this guidance, we'll look specifically at using Azure AD for identity management.
 
 - We assume the customer stores their user profiles in Azure AD (including Office365 and Dynamics CRM tenants)
-- Customers with on-premise Active Directory (AD) can use [Azure AD Connect](/azure/active-directory/hybrid/whatis-hybrid-identity) to sync their on-premise AD with Azure AD.
-
-If a customer with on-premise AD cannot use Azure AD Connect (due to corporate IT policy or other reasons), the SaaS provider can federate with the customer's AD through Active Directory Federation Services (AD FS). This option is described in [Federating with a customer's AD FS](adfs.md).
+- Customers with on-premises Active Directory can use [Azure AD Connect](https://docs.microsoft.com/azure/active-directory/hybrid/whatis-hybrid-identity) to sync their on-premises Active Directory with Azure AD. If a customer with on-premises Active Directory cannot use Azure AD Connect (due to corporate IT policy or other reasons), the SaaS provider can federate with the customer's directory through Active Directory Federation Services (AD FS). This option is described in [Federating with a customer's AD FS](adfs.md).
 
 This guidance does not consider other aspects of multitenancy such as data partitioning, per-tenant configuration, and so forth.
 
@@ -93,4 +96,3 @@ This guidance does not consider other aspects of multitenancy such as data parti
 <!-- links -->
 
 [sample-application]: https://github.com/mspnp/multitenant-saas-guidance
-[running-the-app]: ./run-the-app.md

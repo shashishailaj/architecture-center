@@ -4,7 +4,16 @@ titleSuffix: Azure Example Scenarios
 description: Establish a trusted environment for communication and information sharing without resorting to a centralized database.
 author: vitoc
 ms.date: 09/09/2018
-ms.custom: csa-team
+ms.category:
+  - blockchain
+ms.topic: example-scenario
+ms.service: architecture-center
+ms.subservice: example-scenario
+ms.custom:
+  - csa-team
+  - blockchain
+  - finance
+social_image_url: /azure/architecture/example-scenario/apps/media/architecture-decentralized-trust.png
 ---
 
 # Decentralized trust between banks on Azure
@@ -61,15 +70,13 @@ For other extended or different scenarios, concerns such as transaction privacy 
 
 ### Availability
 
-[Azure Monitor][monitor] is used to continuously monitor the blockchain network for issues to ensure availability. A link to a custom monitoring dashboard based on Azure Monitor will be sent to you upon successful deployment of the blockchain solution template used in this scenario. The dashboard shows nodes that are reporting heartbeats in the past 30 minutes as well as other useful statistics.
-
-For other availability topics, see the [availability checklist][availability] in the Azure Architecture Center.
+[Azure Monitor][monitor] is used to continuously monitor the blockchain network for issues to ensure availability. A link to a custom monitoring dashboard based on Azure Monitor will be sent to you on successful deployment of the blockchain solution template used in this scenario. The dashboard shows nodes that are reporting heartbeats in the past 30 minutes as well as other useful statistics.
 
 ### Scalability
 
 A popular concern for blockchain is the number of transactions that a blockchain can include within a preset amount of time. This scenario uses Proof-of-Authority where such scalability can be better managed than Proof-of-Work. In Proof-of-Authority&ndash;based networks, consensus participants are known and managed, making it more suitable for private blockchain for a consortium of organization that knows one another. Parameters such as average block time, transactions per minute and compute resource consumption can be easily monitored via the custom dashboard. Resources can then be adjusted accordingly based on scale requirements.
 
-For general guidance on designing scalable solutions, see the [scalability checklist][scalability] in the Azure Architecture Center.
+For general guidance on designing scalable solutions, see the [performance efficiency checklist][scalability] in the Azure Architecture Center.
 
 ### Security
 
@@ -81,7 +88,7 @@ For general guidance on designing secure solutions, see the [Azure Security Docu
 
 The Ethereum PoA blockchain can itself provide some degree of resilience as the validator nodes can be deployed in different regions. Azure has options for deployments in over 54 regions worldwide. A blockchain such as the one in this scenario provides unique and refreshing possibilities of cooperation to increase resilience. The resilience of the network is not just provided for by a single centralized party but all members of the consortium. A proof-of-authority&ndash;based blockchain allows network resilience to be even more planned and deliberate.
 
-For general guidance on designing resilient solutions, see [Designing resilient applications for Azure][resiliency].
+For general guidance on designing resilient solutions, see [Designing reliable Azure applications](../../framework/resiliency/app-design.md).
 
 ## Pricing
 
@@ -95,7 +102,7 @@ We have provided three sample cost profiles based on the number of scale set VM 
 
 The above pricing is for one consortium member to start or join a blockchain network. Typically in a consortium where there are multiple companies or organizations involved, each member will get their own Azure subscription.
 
-## Next Steps
+## Next steps
 
 To see an example of this scenario, deploy the [Ethereum PoA blockchain demo application][deploy] on Azure. Then review the [README of the scenario source code][source].
 
@@ -107,12 +114,10 @@ For more information on using the Ethereum Proof-of-Authority solution template 
 [small-pricing]: https://azure.com/e/4e429d721eb54adc9a1558fae3e67990
 [medium-pricing]: https://azure.com/e/bb42cd77437744be8ed7064403bfe2ef
 [large-pricing]: https://azure.com/e/e205b443de3e4adfadf4e09ffee30c56
-[guide]: /azure/blockchain-workbench/ethereum-poa-deployment
+[guide]: https://docs.microsoft.com/azure/blockchain-workbench/ethereum-poa-deployment
 [deploy]: https://portal.azure.com/?pub_source=email&pub_status=success#create/microsoft-azure-blockchain.azure-blockchain-ethereumethereum-poa-consortium
 [source]: https://github.com/vitoc/creditscoreblockchain
-[monitor]: /azure/monitoring-and-diagnostics/monitoring-overview-azure-monitor
-[availability]: /azure/architecture/checklist/availability
-[scalability]: /azure/architecture/checklist/scalability
-[resiliency]: ../../resiliency/index.md
-[security]: /azure/security/
-[vault]: https://azure.microsoft.com/services/key-vault/
+[monitor]: https://docs.microsoft.com/azure/monitoring-and-diagnostics/monitoring-overview-azure-monitor
+[scalability]: ../../checklist/performance-efficiency.md
+[security]: https://docs.microsoft.com/azure/security
+[vault]: https://azure.microsoft.com/services/key-vault

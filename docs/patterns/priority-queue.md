@@ -5,12 +5,13 @@ description: Prioritize requests sent to services so that requests with a higher
 keywords: design pattern
 author: dragon119
 ms.date: 06/23/2017
+ms.topic: design-pattern
+ms.service: architecture-center
+ms.subservice: cloud-fundamentals
 ms.custom: seodec18
 ---
 
 # Priority Queue pattern
-
-[!INCLUDE [header](../_includes/header.md)]
 
 Prioritize requests sent to services so that requests with a higher priority are received and processed more quickly than those with a lower priority. This pattern is useful in applications that offer different service level guarantees to individual clients.
 

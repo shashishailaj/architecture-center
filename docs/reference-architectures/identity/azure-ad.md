@@ -2,14 +2,22 @@
 title: Integrate on-premises AD domains with Azure AD
 titleSuffix: Azure Reference Architectures
 description: Implement a secure hybrid network architecture using Azure Active Directory (Azure AD).
-author: telmosampaio
-ms.date: 11/28/2016
-ms.custom: seodec18
+author: adamboeglin
+ms.date: 08/28/2019
+ms.topic: reference-architecture
+ms.service: architecture-center
+ms.category:
+  - identity
+  - hybrid
+ms.subservice: reference-architecture
+ms.custom: seodec18, identity
 ---
+
+<!-- cSpell:ignore writeback MSOL -->
 
 # Integrate on-premises Active Directory domains with Azure Active Directory
 
-Azure Active Directory (Azure AD) is a cloud based multi-tenant directory and identity service. This reference architecture shows best practices for integrating on-premises Active Directory domains with Azure AD to provide cloud-based identity authentication. [**Deploy this solution**](#deploy-the-solution).
+Azure Active Directory (Azure AD) is a cloud-based multi-tenant directory and identity service. This reference architecture shows best practices for integrating on-premises Active Directory domains with Azure AD to provide cloud-based identity authentication. [**Deploy this solution**](#deploy-the-solution).
 
 ![Cloud identity architecture using Azure Active Directory](./images/azure-ad.png)
 
@@ -22,11 +30,11 @@ Azure Active Directory (Azure AD) is a cloud based multi-tenant directory and id
 Typical uses for this reference architecture include:
 
 - Web applications deployed in Azure that provide access to remote users who belong to your organization.
-- Implementing self-service capabilities for end-users, such as resetting their passwords, and delegating group management. Note that this requires Azure AD Premium edition.
+- Implementing self-service capabilities for end-users, such as resetting their passwords, and delegating group management. This requires Azure AD Premium edition.
 - Architectures in which the on-premises network and the application's Azure VNet are not connected using a VPN tunnel or ExpressRoute circuit.
 
 > [!NOTE]
-> Azure AD can authenticate the identity of users and applications that exist in an organization’s directory. Some applications and services, such as SQL Server, may require computer authentication, in which case this solution is not appropriate.
+> Azure AD can authenticate the identity of users and applications that exist in an organization's directory. Some applications and services, such as SQL Server, may require computer authentication, in which case this solution is not appropriate.
 >
 
 For additional considerations, see [Choose a solution for integrating on-premises Active Directory with Azure][considerations].
@@ -37,7 +45,7 @@ The architecture has the following components.
 
 - **Azure AD tenant**. An instance of [Azure AD][azure-active-directory] created by your organization. It acts as a directory service for cloud applications by storing objects copied from the on-premises Active Directory and provides identity services.
 - **Web tier subnet**. This subnet holds VMs that run a web application. Azure AD can act as an identity broker for this application.
-- **On-premises AD DS server**. An on-premise directory and identity service. The AD DS directory can be synchronized with Azure AD to enable it to authenticate on-premise users.
+- **On-premises AD DS server**. An on-premises directory and identity service. The AD DS directory can be synchronized with Azure AD to enable it to authenticate on-premises users.
 - **Azure AD Connect sync server**. An on-premises computer that runs the [Azure AD Connect][azure-ad-connect] sync service. This service synchronizes information held in the on-premises Active Directory to Azure AD. For example, if you provision or deprovision groups and users on-premises, these changes propagate to Azure AD.
 
   > [!NOTE]
@@ -66,7 +74,7 @@ To implement high availability for the AD Connect sync service, run a secondary 
 
 ### Security recommendations
 
-**User password management**. The Azure AD Premium editions support password writeback, enabling your on-premises users to perform self-service password resets from within the Azure portal. This feature should only be enabled after reviewing your organization's password security policy. For example, you can restrict which users can change their passwords, and you can tailor the password management experience. For more information, see [Customizing Password Management to fit your organization's needs][aad-password-management].
+**User password management**. The Azure AD Premium editions support password writeback, enabling your on-premises users to perform self-service password resets from within the Azure portal. This feature should be enabled only after reviewing your organization's password security policy. For example, you can restrict which users can change their passwords, and you can tailor the password management experience. For more information, see [Customizing Password Management to fit your organization's needs][aad-password-management].
 
 **Protect on-premises applications that can be accessed externally.** Use the Azure AD Application Proxy to provide controlled access to on-premises web applications for external users through Azure AD. Only users that have valid credentials in your Azure directory have permission to use the application. For more information, see the article [Enable Application Proxy in the Azure portal][aad-application-proxy].
 
@@ -76,7 +84,7 @@ You can use the reporting feature of Azure AD in the Azure portal to monitor sec
 
 ### Topology recommendations
 
-Configure Azure AD Connect to implement a topology that most closely matches the requirements of your organization. Topologies that Azure AD Connect supports include the following:
+Configure Azure AD Connect to implement a topology that most closely matches the requirements of your organization. Topologies that Azure AD Connect supports include:
 
 - **Single forest, single Azure AD directory**. In this topology, Azure AD Connect synchronizes objects and identity information from one or more domains in a single on-premises forest into a single Azure AD tenant. This is the default topology implemented by the express installation of Azure AD Connect.
 
@@ -113,11 +121,11 @@ For more information about these topologies, see [Topologies for Azure AD Connec
 
 By default, the Azure AD Connect sync server configures password hash synchronization between the on-premises domain and Azure AD, and the Azure AD service assumes that users authenticate by providing the same password that they use on-premises. For many organizations, this is appropriate, but you should consider your organization's existing policies and infrastructure. For example:
 
-- The security policy of your organization may prohibit synchronizing password hashes to the cloud. In this case your organization should consider [pass-through authentication](/azure/active-directory/connect/active-directory-aadconnect-pass-through-authentication).
+- The security policy of your organization may prohibit synchronizing password hashes to the cloud. In this case, your organization should consider [pass-through authentication](https://docs.microsoft.com/azure/active-directory/connect/active-directory-aadconnect-pass-through-authentication).
 - You might require that users experience seamless single sign-on (SSO) when accessing cloud resources from domain-joined machines on the corporate network.
-- Your organization might already have Active Directory Federation Services (AD FS) or a third party federation provider deployed. You can configure Azure AD to use this infrastructure to implement authentication and SSO rather than by using password information held in the cloud.
+- Your organization might already have Active Directory Federation Services (AD FS) or a third-party federation provider deployed. You can configure Azure AD to use this infrastructure to implement authentication and SSO rather than by using password information held in the cloud.
 
-For more information, see [Azure AD Connect User Sign on options][aad-user-sign-in].
+For more information, see [Azure AD Connect User Sign-on options][aad-user-sign-in].
 
 ### Azure AD application proxy
 
@@ -129,7 +137,7 @@ For more information, see [Publish applications using Azure AD Application proxy
 
 ### Object synchronization
 
-Azure AD Connect's default configuration synchronizes objects from your local Active Directory directory based on the rules specified in the article [Azure AD Connect sync: Understanding the default configuration][aad-connect-sync-default-rules]. Objects that satisfy these rules are synchronized while all other objects are ignored. Some example rules:
+The default configuration for Azure AD Connect synchronizes objects from your local Active Directory directory based on the rules specified in the article [Azure AD Connect sync: Understanding the default configuration][aad-connect-sync-default-rules]. Objects that satisfy these rules are synchronized while all other objects are ignored. Some example rules:
 
 - User objects must have a unique *sourceAnchor* attribute and the *accountEnabled* attribute must be populated.
 - User objects must have a *sAMAccountName* attribute and cannot start with the text *Azure AD_* or *MSOL_*.
@@ -156,10 +164,10 @@ For the Azure AD Connect sync server, determine how many objects you are likely 
 
 ## Availability considerations
 
-The Azure AD service is geo-distributed and runs in multiple data centers spread around the world with automated failover. If a data center becomes unavailable, Azure AD ensures that your directory data is available for instance access in at least two more regionally dispersed data centers.
+The Azure AD service is geo-distributed and runs in multiple datacenters spread around the world with automated failover. If a datacenter becomes unavailable, Azure AD ensures that your directory data is available for instance access in at least two more regionally dispersed datacenters.
 
 > [!NOTE]
-> The service level agreement (SLA) for Azure AD Basic and Premium services guarantees at least 99.9% availability. There is no SLA for the Free tier of Azure AD. For more information, see [SLA for Azure Active Directory][sla-aad].
+> The service level agreement (SLA) for the Office 365 Apps AD tier and Premium services guarantees at least 99.9% availability. There is no SLA for the Free tier of Azure AD. For more information, see [SLA for Azure Active Directory][sla-aad].
 >
 
 Consider provisioning a second instance of Azure AD Connect sync server in staging mode to increase availability, as discussed in the topology recommendations section.
@@ -182,7 +190,7 @@ Azure AD provides the following options for managing domains and directories in 
 
 Azure AD Connect installs the following tools to maintain Azure AD Connect sync services from your on-premises machines:
 
-- **Microsoft Azure Active Directory Connect console**. This tool enables you to modify the configuration of the Azure AD Sync server, customize how synchronization occurs, enable or disable staging mode, and switch the user sign-in mode. Note that you can enable Active Directory FS sign-in using your on-premises infrastructure.
+- **Microsoft Azure Active Directory Connect console**. This tool enables you to modify the configuration of the Azure AD Sync server, customize how synchronization occurs, enable or disable staging mode, and switch the user sign-in mode. You can enable Active Directory FS sign-in using your on-premises infrastructure.
 - **Synchronization Service Manager**. Use the *Operations* tab in this tool to manage the synchronization process and detect whether any parts of the process have failed. You can trigger synchronizations manually using this tool. The *Connectors* tab enables you to control the connections for the domains that the synchronization engine is attached to.
 - **Synchronization Rules Editor**. Use this tool to customize the way objects are transformed when they are copied between an on-premises directory and Azure AD. This tool enables you to specify additional attributes and objects for synchronization, then executes filters to determine which objects should or should not be synchronized. For more information, see the Synchronization Rule Editor section in the document [Azure AD Connect sync: Understanding the default configuration][aad-connect-sync-default-rules].
 
@@ -192,7 +200,7 @@ For more information and tips for managing Azure AD Connect, see [Azure AD Conne
 
 Use conditional access control to deny authentication requests from unexpected sources:
 
-- Trigger [Azure Multi-Factor Authentication (MFA)][azure-multifactor-authentication] if a user attempts to connect from a nontrusted location such as across the Internet instead of a trusted network.
+- Trigger [Azure Multi-Factor Authentication (MFA)][azure-multifactor-authentication] if a user attempts to connect from a untrusted location such as across the Internet instead of a trusted network.
 
 - Use the device platform type of the user (iOS, Android, Windows Mobile, Windows) to determine access policy to applications and features.
 
@@ -204,58 +212,61 @@ Use conditional access control to deny authentication requests from unexpected s
 
 For more information, see [Azure Active Directory conditional access][aad-conditional-access].
 
+## DevOps considerations
+
+For DevOps considerations, see [DevOps: Extending Active Directory Domain Services (AD DS) to Azure](adds-extend-domain.md#devops-considerations).
+
+## Cost considerations
+
+Use the [Azure pricing calculator][azure-pricing-calculator] to estimate costs. Other considerations are described in the Cost section in [Microsoft Azure Well-Architected Framework][aaf-cost].
+
+Here are cost considerations for the services used in this architecture.
+
+### Azure AD Connect
+
+For information about the editions offered by Azure Active Directory, see [Azure AD pricing][Azure-AD-pricing]. The AD Connect sync feature is available in all editions.
+
+### VMs for N-Tier application
+
+The deployment includes infrastructure for an N-tier application. For cost information about these resources, [Run VMs for an N-tier architecture][implementing-a-multi-tier-architecture-on-Azure].
+
 ## Deploy the solution
 
-A deployment for a reference architecture that implements these recommendations and considerations is available on GitHub. This reference architecture deploys a simulated on-premises network in Azure that you can use to test and experiment. The reference architecture can be deployed with either with Windows or Linux VMs by following the directions below:
-
-<!-- markdownlint-disable MD033 -->
-
-1. Click the button below:<br><a href="https://portal.azure.com/#create/Microsoft.Template/uri/https%3A%2F%2Fraw.githubusercontent.com%2Fmspnp%2Fidentity-reference-architectures%2Fmaster%2Fazure-ad%2Fazuredeploy.json" target="_blank"><img src="https://azuredeploy.net/deploybutton.png"/></a>
-
-2. Once the link has opened in the Azure portal, you must enter values for some of the settings:
-   - The **Resource group** name is already defined in the parameter file, so select **Create New** and enter `ra-aad-onpremise-rg` in the text box.
-   - Select the region from the **Location** drop down box.
-   - Do not edit the **Template Root Uri** or the **Parameter Root Uri** text boxes.
-   - Select **windows** or **linux** in the **Os Type** the drop down box.
-   - Review the terms and conditions, then click the **I agree to the terms and conditions stated above** checkbox.
-   - Click the **Purchase** button.
-
-3. Wait for the deployment to complete.
-
-4. The parameter files include a hard-coded administrator user names and passwords, and it is strongly recommended that you immediately change both on all the VMs. Click each VM in the Azure Portal then click on **Reset password** in the **Support + troubleshooting** blade. Select **Reset password** in the **Mode** drop down box, then select a new **User name** and **Password**. Click the **Update** button to persist the new user name and password.
-
-<!-- markdownlint-disable MD033 -->
+A deployment for a reference architecture that implements these recommendations and considerations is available on GitHub. This reference architecture deploys a simulated on-premises network in Azure that you can use to test and experiment. To deploy the solution, see the [readme](https://github.com/mspnp/identity-reference-architectures/tree/master/azure-ad) on GitHub.
 
 <!-- links -->
 
-[implementing-a-multi-tier-architecture-on-Azure]: ../virtual-machines-windows/n-tier.md
+[aaf-cost]: ../../framework/cost/overview.md
+[implementing-a-multi-tier-architecture-on-Azure]: ../n-tier/n-tier-sql-server.md#cost-considerations
 
-[aad-agent-installation]: /azure/active-directory/active-directory-aadconnect-health-agent-install
-[aad-application-proxy]: /azure/active-directory/active-directory-application-proxy-enable
-[aad-conditional-access]: /azure/active-directory//active-directory-conditional-access
-[aad-connect-sync-default-rules]: /azure/active-directory/hybrid/concept-azure-ad-connect-sync-default-configuration
-[aad-connect-sync-operational-tasks]: /azure/active-directory/hybrid/how-to-connect-sync-operations
+[aad-agent-installation]: https://docs.microsoft.com/azure/active-directory/active-directory-aadconnect-health-agent-install
+[aad-application-proxy]: https://docs.microsoft.com/azure/active-directory/active-directory-application-proxy-enable
+[aad-conditional-access]: https://docs.microsoft.com/azure/active-directory//active-directory-conditional-access
+[aad-connect-sync-default-rules]: https://docs.microsoft.com/azure/active-directory/hybrid/concept-azure-ad-connect-sync-default-configuration
+[aad-connect-sync-operational-tasks]: https://docs.microsoft.com/azure/active-directory/hybrid/how-to-connect-sync-operations
 [aad-dynamic-memberships]: https://youtu.be/Tdiz2JqCl9Q
-[aad-dynamic-membership-rules]: /azure/active-directory/active-directory-accessmanagement-groups-with-advanced-rules
-[aad-editions]: /azure/active-directory/active-directory-editions
-[aad-filtering]: /azure/active-directory/hybrid/how-to-connect-sync-configure-filtering
-[aad-health]: /azure/active-directory/active-directory-aadconnect-health-sync
-[aad-health-adds]: /azure/active-directory/active-directory-aadconnect-health-adds
-[aad-health-adfs]: /azure/active-directory/active-directory-aadconnect-health-adfs
-[aad-identity-protection]: /azure/active-directory/active-directory-identityprotection
-[aad-password-management]: /azure/active-directory/active-directory-passwords-customize
+[aad-dynamic-membership-rules]: https://docs.microsoft.com/azure/active-directory/active-directory-accessmanagement-groups-with-advanced-rules
+[aad-filtering]: https://docs.microsoft.com/azure/active-directory/hybrid/how-to-connect-sync-configure-filtering
+[aad-health]: https://docs.microsoft.com/azure/active-directory/active-directory-aadconnect-health-sync
+[aad-health-adds]: https://docs.microsoft.com/azure/active-directory/active-directory-aadconnect-health-adds
+[aad-health-adfs]: https://docs.microsoft.com/azure/active-directory/active-directory-aadconnect-health-adfs
+[aad-identity-protection]: https://docs.microsoft.com/azure/active-directory/active-directory-identityprotection
+[aad-password-management]: https://docs.microsoft.com/azure/active-directory/active-directory-passwords-customize
 [aad-powershell]: https://msdn.microsoft.com/library/azure/mt757189.aspx
-[aad-reporting-guide]: /azure/active-directory/active-directory-reporting-guide
-[aad-scalability]: https://blogs.technet.microsoft.com/enterprisemobility/2014/09/02/azure-ad-under-the-hood-of-our-geo-redundant-highly-available-distributed-cloud-directory/
-[aad-sync-best-practices]: /azure/active-directory/hybrid/how-to-connect-sync-best-practices-changing-default-configuration
-[aad-sync-disaster-recovery]: /azure/active-directory/hybrid/how-to-connect-sync-operations#disaster-recovery
-[aad-sync-requirements]: /azure/active-directory/active-directory-hybrid-identity-design-considerations-directory-sync-requirements
-[aad-topologies]: /azure/active-directory/hybrid/plan-connect-topologies
-[aad-user-sign-in]: /azure/active-directory/hybrid/plan-connect-user-signin
-[azure-active-directory]: /azure/active-directory-domain-services/active-directory-ds-overview
-[azure-ad-connect]: /azure/active-directory/hybrid/whatis-hybrid-identity
-[azure-multifactor-authentication]: /azure/multi-factor-authentication/multi-factor-authentication
-[considerations]: ./considerations.md
-[resource-manager-overview]: /azure/azure-resource-manager/resource-group-overview
+[aad-reporting-guide]: https://docs.microsoft.com/azure/active-directory/active-directory-reporting-guide
+[aad-scalability]: https://blogs.technet.microsoft.com/enterprisemobility/2014/09/02/azure-ad-under-the-hood-of-our-geo-redundant-highly-available-distributed-cloud-directory
+[aad-sync-best-practices]: https://docs.microsoft.com/azure/active-directory/hybrid/how-to-connect-sync-best-practices-changing-default-configuration
+[aad-sync-disaster-recovery]: https://docs.microsoft.com/azure/active-directory/hybrid/how-to-connect-sync-operations#disaster-recovery
+[aad-sync-requirements]: https://docs.microsoft.com/azure/active-directory/active-directory-hybrid-identity-design-considerations-directory-sync-requirements
+[aad-topologies]: https://docs.microsoft.com/azure/active-directory/hybrid/plan-connect-topologies
+[aad-user-sign-in]: https://docs.microsoft.com/azure/active-directory/hybrid/plan-connect-user-signin
+[AAF-devops]: ../../framework/devops/overview.md
+[azure-active-directory]: https://docs.microsoft.com/azure/active-directory-domain-services/active-directory-ds-overview
+[azure-ad-connect]: https://docs.microsoft.com/azure/active-directory/hybrid/whatis-hybrid-identity
+[Azure-AD-pricing]: https://azure.microsoft.com/pricing/details/active-directory
+[azure-multifactor-authentication]: https://docs.microsoft.com/azure/multi-factor-authentication/multi-factor-authentication
+[considerations]: ./index.md
 [sla-aad]: https://azure.microsoft.com/support/legal/sla/active-directory
 [visio-download]: https://archcenter.blob.core.windows.net/cdn/identity-architectures.vsdx
+[azure-pricing-calculator]: https://azure.microsoft.com/pricing/calculator
+[AAF-devops]: ../../framework/devops/overview.md

@@ -1,10 +1,15 @@
 ---
-title: Deploy highly available network virtual appliances
-titleSuffix: Azure Reference Architectures
+title: Deploy highly available NVAs
 description: Deploy network virtual appliances with high availability.
 author: telmosampaio
 ms.date: 12/08/2018
-ms.custom: seodec18
+ms.topic: reference-architecture
+ms.service: architecture-center
+ms.category:
+  - networking
+  - management-and-governance
+ms.subservice: reference-architecture
+ms.custom: seodec18, networking
 ---
 
 # Deploy highly available network virtual appliances
@@ -29,6 +34,7 @@ The following architectures describe the resources and configuration necessary f
 
 | Solution | Benefits | Considerations |
 | --- | --- | --- |
+| [Load Balancer Standard & HA ports](https://docs.microsoft.com/azure/load-balancer/load-balancer-ha-ports-overview) |Balances all TCP and UDP flows |Confirm with NVA providers how to best use HA ports and to learn which scenarios are supported <br/> HA ports feature is available in all the global Azure regions <br/> Fast failover to healthy instances, with per-instance health probes <br/> Review [limitations](https://docs.microsoft.com/azure/load-balancer/load-balancer-ha-ports-overview#limitations)|
 | [Ingress with layer 7 NVAs][ingress-with-layer-7] |All NVA nodes are active |Requires an NVA that can terminate connections and use SNAT<br/> Requires a separate set of NVAs for traffic coming from the Internet and from Azure <br/> Can only be used for traffic originating outside Azure |
 | [Egress with layer 7 NVAs][egress-with-layer-7] |All NVA nodes are active | Requires an NVA that can terminate connections and implements source network address translation (SNAT)
 | [Ingress-Egress with layer 7 NVAs][ingress-egress-with-layer-7] |All nodes are active<br/>Able to handle traffic originated in Azure |Requires an NVA that can terminate connections and use SNAT<br/>Requires a separate set of NVAs for traffic coming from the Internet and from Azure |
@@ -45,9 +51,6 @@ The following figure shows a high availability architecture that implements an i
 
 The benefit of this architecture is that all NVAs are active, and if one fails the load balancer directs network traffic to the other NVA. Both NVAs route traffic to the internal load balancer so as long as one NVA is active, traffic continues to flow. The NVAs are required to terminate SSL traffic intended for the web tier VMs. These NVAs cannot be extended to handle on-premises traffic because on-premises traffic requires another dedicated set of NVAs with their own network routes.
 
-> [!NOTE]
-> This architecture is used in the [DMZ between Azure and your on-premises datacenter][dmz-on-prem] reference architecture and the [DMZ between Azure and the Internet][dmz-internet] reference architecture. Each of these reference architectures includes a deployment solution that you can use. Follow the links for more information.
-
 ## Egress with layer 7 NVAs
 
 The previous architecture can be expanded to provide an egress DMZ for requests originating in the Azure workload. The following architecture is designed to provide high availability of the NVAs in the DMZ for layer 7 traffic, such as HTTP or HTTPS:
@@ -55,9 +58,6 @@ The previous architecture can be expanded to provide an egress DMZ for requests 
 ![[2]][2]
 
 In this architecture, all traffic originating in Azure is routed to an internal load balancer. The load balancer distributes outgoing requests between a set of NVAs. These NVAs direct traffic to the Internet using their individual public IP addresses.
-
-> [!NOTE]
-> This architecture is used in the [DMZ between Azure and your on-premises datacenter][dmz-on-prem] reference architecture and the [DMZ between Azure and the Internet][dmz-internet] reference architecture. Each of these reference architectures includes a deployment solution that you can use. Follow the links for more information.
 
 ## Ingress-egress with layer 7 NVAs
 
@@ -98,7 +98,7 @@ This architecture uses two Azure virtual machines to host the NVA firewall in an
 
 This solution is designed for Azure customers who cannot configure SNAT for inbound requests on their NVA firewalls. SNAT hides the original source client IP address. If you need to log the original IPs or used them within other layered security components behind your NVAs, this solution offers a basic approach.
 
-The failover of UDR table entries is automated by a next-hop address set to the IP address of an interface on the active NVA firewall virtual machine. The automated failover logic is hosted in a function app that you create using [Azure Functions](/azure/azure-functions/). The failover code runs as a serverless function inside Azure Functions. Deployment is convenient, cost-effective, and easy to maintain and customize. In addition, the function app is hosted within Azure Functions, so it has no dependencies on the virtual network. If changes to the virtual network impact the NVA firewalls, the function app continues to run independently. Testing is more accurate as well, because it takes place outside the virtual network using the same route as the inbound client requests.
+The failover of UDR table entries is automated by a next-hop address set to the IP address of an interface on the active NVA firewall virtual machine. The automated failover logic is hosted in a function app that you create using [Azure Functions](https://docs.microsoft.com/azure/azure-functions/). The failover code runs as a serverless function inside Azure Functions. Deployment is convenient, cost-effective, and easy to maintain and customize. In addition, the function app is hosted within Azure Functions, so it has no dependencies on the virtual network. If changes to the virtual network impact the NVA firewalls, the function app continues to run independently. Testing is more accurate as well, because it takes place outside the virtual network using the same route as the inbound client requests.
 
 To check the availability of the NVA firewall, the function app code probes it in one of two ways:
 
@@ -110,23 +110,21 @@ You choose the type of probe you want to use when you configure the function app
 
 ## Next steps
 
-- Learn how to [implement a DMZ between Azure and your on-premises datacenter][dmz-on-prem] using layer-7 NVAs.
-- Learn how to [implement a DMZ between Azure and the Internet][dmz-internet] using layer-7 NVAs.
-- [Troubleshoot network virtual appliance issues in Azure](/azure/virtual-network/virtual-network-troubleshoot-nva)
+- Learn how to [implement a DMZ between Azure and your on-premises datacenter][dmz-on-premises] using Azure Firewall.
+- [Troubleshoot network virtual appliance issues in Azure](https://docs.microsoft.com/azure/virtual-network/virtual-network-troubleshoot-nva)
 
 <!-- links -->
 
-[cloud-security]: /azure/best-practices-network-security
-[dmz-on-prem]: ./secure-vnet-hybrid.md
-[dmz-internet]: ./secure-vnet-dmz.md
+[cloud-security]: https://docs.microsoft.com/azure/best-practices-network-security
+[dmz-on-premises]: ./secure-vnet-dmz.md
 [egress-with-layer-7]: #egress-with-layer-7-nvas
 [ingress-with-layer-7]: #ingress-with-layer-7-nvas
 [ingress-egress-with-layer-7]: #ingress-egress-with-layer-7-nvas
-[lb-overview]: /azure/load-balancer/load-balancer-overview/
-[nva-scenario]: /azure/virtual-network/virtual-network-scenario-udr-gw-nva/
+[lb-overview]: https://docs.microsoft.com/azure/load-balancer/load-balancer-overview
+[nva-scenario]: https://docs.microsoft.com/azure/virtual-network/virtual-network-scenario-udr-gw-nva
 [pip-udr-switch]: #pip-udr-switch-with-layer-4-nvas
-[udr-overview]: /azure/virtual-network/virtual-networks-udr-overview/
-[zookeeper]: https://zookeeper.apache.org/
+[udr-overview]: https://docs.microsoft.com/azure/virtual-network/virtual-networks-udr-overview
+[zookeeper]: https://zookeeper.apache.org
 [pnp-ha-nva]: https://github.com/mspnp/ha-nva
 [ha-nva-fo]: https://aka.ms/ha-nva-fo
 

@@ -5,12 +5,13 @@ description: Create indexes over the fields in data stores that are frequently r
 keywords: design pattern
 author: dragon119
 ms.date: 06/23/2017
+ms.topic: design-pattern
+ms.service: architecture-center
+ms.subservice: cloud-fundamentals
 ms.custom: seodec18
 ---
 
 # Index Table pattern
-
-[!INCLUDE [header](../_includes/header.md)]
 
 Create indexes over the fields in data stores that are frequently referenced by queries. This pattern can improve query performance by allowing applications to more quickly locate the data to retrieve from a data store.
 

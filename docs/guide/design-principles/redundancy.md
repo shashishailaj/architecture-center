@@ -2,8 +2,11 @@
 title: Make all things redundant
 titleSuffix: Azure Application Architecture Guide
 description: Avoid single points of failure by building redundancy into your application.
-author: MikeWasson
+author: adamboeglin
 ms.date: 08/30/2018
+ms.topic: guide
+ms.service: architecture-center
+ms.subservice: reference-architecture
 ms.custom: seojan19
 ---
 
@@ -21,9 +24,9 @@ A resilient application routes around failure. Identify the critical paths in yo
 
 ![Diagram of load-balanced VMs](./images/load-balancing.svg)
 
-**Replicate databases**. Azure SQL Database and Cosmos DB automatically replicate the data within a region, and you can enable geo-replication across regions. If you are using an IaaS database solution, choose one that supports replication and failover, such as [SQL Server Always On Availability Groups][sql-always-on].
+**Replicate databases**. Azure SQL Database and Cosmos DB automatically replicate the data within a region, and you can enable geo-replication across regions. If you are using an IaaS database solution, choose one that supports replication and failover, such as [SQL Server Always On availability groups][sql-always-on].
 
-**Enable geo-replication**. Geo-replication for [Azure SQL Database][sql-geo-replication] and [Cosmos DB][cosmosdb-geo-replication] creates secondary readable replicas of your data in one or more secondary regions. In the event of an outage, the database can fail over to the secondary region for writes.
+**Enable geo-replication**. Geo-replication for [Azure SQL Database][sql-geo-replication] and [Cosmos DB][cosmos-db-geo-replication] creates secondary readable replicas of your data in one or more secondary regions. In the event of an outage, the database can fail over to the secondary region for writes.
 
 **Partition for availability**. Database partitioning is often used to improve scalability, but it can also improve availability. If one shard goes down, the other shards can still be reached. A failure in one shard will only disrupt a subset of the total transactions.
 
@@ -39,9 +42,8 @@ A resilient application routes around failure. Identify the critical paths in yo
 
 <!-- links -->
 
-[multi-vm-blueprint]: ../../reference-architectures/virtual-machines-windows/multi-vm.md
+[multi-vm-blueprint]: ../../reference-architectures/n-tier/n-tier-sql-server.md
 
-[cassandra]: https://cassandra.apache.org/
-[cosmosdb-geo-replication]: /azure/cosmos-db/distribute-data-globally
+[cosmos-db-geo-replication]: https://docs.microsoft.com/azure/cosmos-db/distribute-data-globally
 [sql-always-on]: https://msdn.microsoft.com/library/hh510230.aspx
-[sql-geo-replication]: /azure/sql-database/sql-database-geo-replication-overview
+[sql-geo-replication]: https://docs.microsoft.com/azure/sql-database/sql-database-geo-replication-overview

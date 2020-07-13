@@ -1,19 +1,26 @@
 ---
 title: Secure a backend web API in a multitenant application
 description: How to secure a backend web API.
-author: MikeWasson
+author: adamboeglin
 ms.date: 07/21/2017
-
+ms.topic: guide
+ms.service: architecture-center
+ms.category:
+  - security
+  - developer-tools
+  - identity
+ms.custom: has-adal-ref
+ms.subservice: reference-architecture
 pnp.series.title: Manage Identity in Multitenant Applications
 pnp.series.prev: authorize
 pnp.series.next: token-cache
 ---
 
-# Secure a backend web API
+# Secure a backend web API for multitenant applications
 
 [![GitHub](../_images/github.png) Sample code][sample application]
 
-The [Tailspin Surveys] application uses a backend web API to manage CRUD operations on surveys. For example, when a user clicks "My Surveys", the web application sends an HTTP request to the web API:
+The [Tailspin Surveys][surveys] application uses a backend web API to manage CRUD operations on surveys. For example, when a user clicks "My Surveys", the web application sends an HTTP request to the web API:
 
 ```http
 GET /users/{userId}/surveys
@@ -40,7 +47,7 @@ The web API does not allow anonymous requests, so the web app must authenticate 
 There are two main approaches you can take:
 
 * Delegated user identity. The web application authenticates with the user's identity.
-* Application identity. The web application authenticates with its client ID, using OAuth2 client credential flow.
+* Application identity. The web application authenticates with its client ID, using OAuth 2 client credential flow.
 
 The Tailspin application implements delegated user identity. Here are the main differences:
 
@@ -55,18 +62,19 @@ The Tailspin application implements delegated user identity. Here are the main d
 **Application identity:**
 
 * The web API does not get information about the user.
-* The web API cannot perform any authorization based on the user identity. All authorization decisions are made by the web application.  
+* The web API cannot perform any authorization based on the user identity. All authorization decisions are made by the web application.
 * The web API cannot be used by an untrusted client (JavaScript or native client application).
 * This approach may be somewhat simpler to implement, because there is no authorization logic in the Web API.
 
 In either approach, the web application must get an access token, which is the credential needed to call the web API.
 
-* For delegated user identity, the token has to come from the IDP, which can issue a token on behalf of the user.
+* For delegated user identity, the token has to come from an identity provider (IDP), such as Azure Active Directory, which can issue a token on behalf of the user.
 * For client credentials, an application might get the token from the IDP or host its own token server. (But don't write a token server from scratch; use a well-tested framework like [IdentityServer4].) If you authenticate with Azure AD, it's strongly recommended to get the access token from Azure AD, even with client credential flow.
 
 The rest of this article assumes the application is authenticating with Azure AD.
 
-![Getting the access token](./images/access-token.png)
+<img src="./images/access-token.png" alt="Getting the access token" aria-describedby="description-1">
+<p id="description-1" class="visually-hidden">A diagram that shows the web application requesting an access token from Azure AD and sending the token to the web API.</p>
 
 ## Register the web API in Azure AD
 
@@ -74,11 +82,12 @@ In order for Azure AD to issue a bearer token for the web API, you need to confi
 
 1. Register the web API in Azure AD.
 
-2. Add the client ID of the web app to the web API application manifest, in the `knownClientApplications` property. See [Update the application manifests].
+2. Add the client ID of the web app to the web API application manifest, in the `knownClientApplications` property. See the [GitHub readme](https://github.com/mspnp/multitenant-saas-guidance/blob/master/get-started.md#update-the-application-manifests) for more information.
 
-3. Give the web application permission to call the web API. In the Azure Management Portal, you can set two types of permissions: "Application Permissions" for application identity (client credential flow), or "Delegated Permissions" for delegated user identity.
+3. Give the web application permission to call the web API. In the Azure portal, you can set two types of permissions: "Application Permissions" for application identity (client credential flow), or "Delegated Permissions" for delegated user identity.
 
-   ![Delegated permissions](./images/delegated-permissions.png)
+    <img src="./images/delegated-permissions.png" alt="Delegated permissions" aria-describedby="description-2">
+    <p id="description-2" class="visually-hidden">A screenshot of the Azure portal that shows the application permissions and delegated permissions.</p>
 
 ## Getting an access token
 
@@ -105,13 +114,13 @@ public override async Task AuthorizationCodeReceived(AuthorizationCodeReceivedCo
 
 Here are the various parameters that are needed:
 
-* `authority`. Derived from the tenant ID of the signed in user. (Not the tenant ID of the SaaS provider)  
+* `authority`. Derived from the tenant ID of the signed in user. (Not the tenant ID of the SaaS provider)
 * `authorizationCode`. the auth code that you got back from the IDP.
 * `clientId`. The web application's client ID.
 * `clientSecret`. The web application's client secret.
-* `redirectUri`. The redirect URI that you set for OpenID connect. This is where the IDP calls back with the token.
+* `redirectUri`. The redirect URI that you set for OpenID Connect. This is where the IDP calls back with the token.
 * `resourceID`. The App ID URI of the web API, which you created when you registered the web API in Azure AD
-* `tokenCache`. An object that caches the access tokens. See [Token caching].
+* `tokenCache`. An object that caches the access tokens. See [Token caching][token-cache].
 
 If `AcquireTokenByAuthorizationCodeAsync` succeeds, ADAL caches the token. Later, you can get the token from the cache by calling AcquireTokenSilentAsync:
 
@@ -223,7 +232,7 @@ As this example shows, you can also use the **TokenValidated** event to modify t
 
 For a general discussion of authorization, see [Role-based and resource-based authorization][Authorization].
 
-The JwtBearer middleware handles the authorization responses. For example, to restrict a controller action to authenticated users, use the **[Authorize]** atrribute and specify **JwtBearerDefaults.AuthenticationScheme** as the authentication scheme:
+The JwtBearer middleware handles the authorization responses. For example, to restrict a controller action to authenticated users, use the **[Authorize]** attribute and specify **JwtBearerDefaults.AuthenticationScheme** as the authentication scheme:
 
 ```csharp
 [Authorize(ActiveAuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
@@ -231,7 +240,7 @@ The JwtBearer middleware handles the authorization responses. For example, to re
 
 This returns a 401 status code if the user is not authenticated.
 
-To restrict a controller action by authorizaton policy, specify the policy name in the **[Authorize]** attribute:
+To restrict a controller action by authorization policy, specify the policy name in the **[Authorize]** attribute:
 
 ```csharp
 [Authorize(Policy = PolicyNames.RequireSurveyCreator)]
@@ -264,18 +273,52 @@ public void ConfigureServices(IServiceCollection services)
 }
 ```
 
-[**Next**][token cache]
+## Protecting application secrets
+
+It's common to have application settings that are sensitive and must be protected, such as:
+
+* Database connection strings
+* Passwords
+* Cryptographic keys
+
+As a security best practice, you should never store these secrets in source control. It's too easy for them to leak &mdash; even if your source code repository is private. And it's not just about keeping secrets from the general public. On larger projects, you might want to restrict which developers and operators can access the production secrets. (Settings for test or development environments are different.)
+
+A more secure option is to store these secrets in [Azure Key Vault][KeyVault]. Key Vault is a cloud-hosted service for managing cryptographic keys and other secrets. This article shows how to use Key Vault to store configuration settings for your app.
+
+In the [Tailspin Surveys][surveys] application, the following settings are secret:
+
+* The database connection string.
+* The Redis connection string.
+* The client secret for the web application.
+
+The Surveys application loads configuration settings from the following places:
+
+* The appsettings.json file
+* The [user secrets store][user-secrets] (development environment only; for testing)
+* The hosting environment (app settings in Azure web apps)
+* Key Vault (when enabled)
+
+Each of these overrides the previous one, so any settings stored in Key Vault take precedence.
+
+> [!NOTE]
+> By default, the Key Vault configuration provider is disabled. It's not needed for running the application locally. You would enable it in a production deployment.
+
+At startup, the application reads settings from every registered configuration provider, and uses them to populate a strongly typed options object. For more information, see [Using Options and configuration objects][options].
+
+[**Next**][token-cache]
 
 <!-- links -->
-[ADAL]: https://msdn.microsoft.com/library/azure/jj573266.aspx
-[JwtBearer]: https://www.nuget.org/packages/Microsoft.AspNet.Authentication.JwtBearer
 
-[Tailspin Surveys]: tailspin.md
+[Authorization]: ./authorize.md
+[ADAL]: https://docs.microsoft.com/azure/active-directory/develop/active-directory-authentication-libraries
+[claims-transformation]: ./claims.md#claims-transformations
 [IdentityServer4]: https://github.com/IdentityServer/IdentityServer4
-[Update the application manifests]: ./run-the-app.md#update-the-application-manifests
-[Token caching]: token-cache.md
-[tenant sign-up]: signup.md
-[claims-transformation]: claims.md#claims-transformations
-[Authorization]: authorize.md
+[JwtBearer]: https://www.nuget.org/packages/Microsoft.AspNet.Authentication.JwtBearer
+[KeyVault]: https://azure.microsoft.com/services/key-vault
+[options]: https://docs.microsoft.com/aspnet/core/fundamentals/configuration/options
+[tenant sign-up]: ./signup.md
+[Token caching]: ./token-cache.md
 [sample application]: https://github.com/mspnp/multitenant-saas-guidance
-[token cache]: token-cache.md
+[surveys]: ./tailspin.md
+[token-cache]: ./token-cache.md
+[user-secrets]: https://docs.microsoft.com/aspnet/core/security/app-secrets

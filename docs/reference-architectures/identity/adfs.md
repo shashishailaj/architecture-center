@@ -3,8 +3,14 @@ title: Extend on-premises AD FS to Azure
 titleSuffix: Azure Reference Architectures
 description: Implement a secure hybrid network architecture with Active Directory Federation Service authorization in Azure.
 author: telmosampaio
-ms.date: 12/18.2018
-ms.custom: seodec18
+ms.date: 12/18/2018
+ms.topic: reference-architecture
+ms.service: architecture-center
+ms.category:
+  - identity
+  - hybrid
+ms.subservice: reference-architecture
+ms.custom: seodec18, identity
 ---
 
 # Extend Active Directory Federation Services (AD FS) to Azure
@@ -36,7 +42,7 @@ For additional considerations, see [Choose a solution for integrating on-premise
 
 ## Architecture
 
-This architecture extends the implementation described in [Extending AD DS to Azure][extending-ad-to-azure]. It contains the followign components.
+This architecture extends the implementation described in [Extending AD DS to Azure][extending-ad-to-azure]. It contains the following components.
 
 - **AD DS subnet**. The AD DS servers are contained in their own subnet with network security group (NSG) rules acting as a firewall.
 
@@ -101,7 +107,7 @@ The article [Deploying a Federation Server Farm][Deploying_a_federation_server_f
 3. Add each AD FS server VM to the domain.
 
 > [!NOTE]
-> To install AD FS, the domain controller running the primary domain controller (PDC) emulator flexible single master operation (FSMO) role for the domain must be running and accessible from the AD FS VMs. <<RBC: Is there a way to make this less repetitive?>>
+> To install AD FS, the domain controller running the primary domain controller (PDC) emulator flexible single master operation (FSMO) role for the domain must be running and accessible from the AD FS VMs.
 >
 
 ### AD FS trust
@@ -118,7 +124,7 @@ Publish your organization's web applications and make them available to external
 
 AD FS supports token transformation and augmentation. Azure Active Directory does not provide this feature. With AD FS, when you set up the trust relationships, you can:
 
-- Configure claim transformations for authorization rules. For example, you can map group security from a representation used by a non-Microsoft partner organization to something that that Active Directory DS can authorize in your organization.
+- Configure claim transformations for authorization rules. For example, you can map group security from a representation used by a non-Microsoft partner organization to something that Active Directory DS can authorize in your organization.
 - Transform claims from one format to another. For example, you can map from SAML 2.0 to SAML 1.1 if your application only supports SAML 1.1 claims.
 
 ### AD FS monitoring
@@ -183,6 +189,24 @@ Restrict direct sign in access to the AD FS and WAP servers. Only DevOps staff s
 
 Consider using a set of network virtual appliances that logs detailed information on traffic traversing the edge of your virtual network for auditing purposes.
 
+## DevOps considerations
+
+For DevOps considerations, see [DevOps: Extending Active Directory Domain Services (AD DS) to Azure](adds-extend-domain.md#devops-considerations).
+
+## Cost considerations
+
+Use the [Azure pricing calculator][azure-pricing-calculator] to estimate costs. Other considerations are described in the Cost section in [Microsoft Azure Well-Architected Framework][aaf-cost].
+
+Here are cost considerations for the services used in this architecture.
+
+### AD Domain Services
+
+Consider having Active Directory Domain Services as a shared service that is consumed by multiple workloads to lower costs. For more information, see [Active Directory Domain Services pricing][ADDS-pricing].
+
+### Azure AD Federation Services
+
+For information about the editions offered by Azure Active Directory, see [Azure AD pricing][Azure-AD-pricing]. The AD Federation Services feature is available in all editions.
+
 ## Deploy the solution
 
 A deployment for this architecture is available on [GitHub][github]. Note that the entire deployment can take up to two hours, which includes creating the VPN gateway and running the scripts that configure Active Directory and AD FS.
@@ -191,7 +215,7 @@ A deployment for this architecture is available on [GitHub][github]. Note that t
 
 1. Clone, fork, or download the zip file for the [GitHub repository](https://github.com/mspnp/identity-reference-architectures).
 
-1. Install [Azure CLI 2.0](/cli/azure/install-azure-cli?view=azure-cli-latest).
+1. Install [Azure CLI 2.0](https://docs.microsoft.com/cli/azure/install-azure-cli?view=azure-cli-latest).
 
 1. Install the [Azure building blocks](https://github.com/mspnp/template-building-blocks/wiki/Install-Azure-Building-Blocks) npm package.
 
@@ -251,7 +275,7 @@ A deployment for this architecture is available on [GitHub][github]. Note that t
 
 1. From the jumpbox, open a remote desktop session to the VM named `ra-adfs-proxy-vm1`. The private IP address is 10.0.6.4.
 
-1. From this remote desktop session, run the [PowerShell ISE](/powershell/scripting/components/ise/windows-powershell-integrated-scripting-environment--ise-).
+1. From this remote desktop session, run the [PowerShell ISE][psise].
 
 1. In PowerShell, navigate to the following directory:
 
@@ -280,7 +304,7 @@ A deployment for this architecture is available on [GitHub][github]. Note that t
 
     At the `Get-Credential` prompt, enter the password that you specified in the deployment parameter file.
 
-1. Run the following command to monitor the progress of the [DSC](/powershell/dsc/overview/overview) configuration:
+1. Run the following command to monitor the progress of the [DSC](https://docs.microsoft.com/powershell/scripting/dsc/overview/overview) configuration:
 
     ```powershell
     Get-DscConfigurationStatus
@@ -300,7 +324,7 @@ A deployment for this architecture is available on [GitHub][github]. Note that t
 
 1. From the jumpbox, open a remote desktop session to the VM named `ra-adfs-proxy-vm2`. The private IP address is 10.0.6.5.
 
-1. From this remote desktop session, run the [PowerShell ISE](/powershell/scripting/components/ise/windows-powershell-integrated-scripting-environment--ise-).
+1. From this remote desktop session, run the [PowerShell ISE][psise].
 
 1. Navigate to the following directory:
 
@@ -351,44 +375,35 @@ A deployment for this architecture is available on [GitHub][github]. Note that t
 
 1. From the jumpbox, open a remote desktop session to the VM named `ra-adfs-adfs-vm1`. The private IP address is 10.0.5.4.
 
-1. Follow the steps in [Enable the Idp-Intiated Sign on page](/windows-server/identity/ad-fs/troubleshooting/ad-fs-tshoot-initiatedsignon#enable-the-idp-intiated-sign-on-page) to enable the sign-on page.
+1. Follow the steps in [Enable the Idp-Initiated Sign on page](https://docs.microsoft.com/windows-server/identity/ad-fs/troubleshooting/ad-fs-tshoot-initiatedsignon#enable-the-idp-initiated-sign-on-page) to enable the sign-on page.
 
 1. From the jump box, browse to `https://adfs.contoso.com/adfs/ls/idpinitiatedsignon.htm`. You may receive a certificate warning that you can ignore for this test.
 
 1. Verify that the Contoso Corporation sign-in page appears. Sign in as **contoso\testuser**.
 
 <!-- links -->
-[extending-ad-to-azure]: adds-extend-domain.md
 
-[vm-recommendations]: ../virtual-machines-windows/single-vm.md
-[implementing-a-secure-hybrid-network-architecture]: ../dmz/secure-vnet-hybrid.md
-[implementing-a-secure-hybrid-network-architecture-with-internet-access]: ../dmz/secure-vnet-dmz.md
-[hybrid-azure-on-prem-vpn]: ../hybrid-networking/vpn.md
-
-[azure-cli]: /azure/azure-resource-manager/xplat-cli-azure-resource-manager
-[DRS]: https://technet.microsoft.com/library/dn280945.aspx
+[extending-ad-to-azure]: ./adds-extend-domain.md
+[aaf-cost]: ../../framework/cost/overview.md
+[Azure-AD-pricing]: https://azure.microsoft.com/pricing/details/active-directory
 [where-to-place-an-fs-proxy]: https://technet.microsoft.com/library/dd807048.aspx
+[ADDS-pricing]: https://azure.microsoft.com/pricing/details/active-directory-ds
 [ADDRS]: https://technet.microsoft.com/library/dn486831.aspx
 [plan-your-adfs-deployment]: https://msdn.microsoft.com/library/azure/dn151324.aspx
 [ad_network_recommendations]: #network_configuration_recommendations_for_AD_DS_VMs
 [adfs_certificates]: https://technet.microsoft.com/library/dn781428(v=ws.11).aspx
-[create_service_account_for_adfs_farm]: https://technet.microsoft.com/library/dd807078.aspx
 [adfs-configuration-database]: https://technet.microsoft.com/library/ee913581(v=ws.11).aspx
-[active-directory-federation-services]: /windows-server/identity/active-directory-federation-services
-[security-considerations]: #security-considerations
-[recommendations]: #recommendations
+[active-directory-federation-services]: https://docs.microsoft.com/windows-server/identity/active-directory-federation-services
 [active-directory-federation-services-overview]: https://technet.microsoft.com/library/hh831502(v=ws.11).aspx
-[establishing-federation-trust]: https://blogs.msdn.microsoft.com/alextch/2011/06/27/establishing-federation-trust/
-[Deploying_a_federation_server_farm]:  /windows-server/identity/ad-fs/deployment/deploying-a-federation-server-farm
+[establishing-federation-trust]: https://blogs.msdn.microsoft.com/alextch/2011/06/27/establishing-federation-trust
+[Deploying_a_federation_server_farm]: https://docs.microsoft.com/windows-server/identity/ad-fs/deployment/deploying-a-federation-server-farm
 [install_and_configure_the_web_application_proxy_server]: https://technet.microsoft.com/library/dn383662.aspx
 [publish_applications_using_AD_FS_preauthentication]: https://technet.microsoft.com/library/dn383640.aspx
-[managing-adfs-components]: https://technet.microsoft.com/library/cc759026.aspx
 [oms-adfs-pack]: https://www.microsoft.com/download/details.aspx?id=41184
-[azure-powershell-download]: /powershell/azure/overview
-[aad]: /azure/active-directory/
-[aadb2c]: /azure/active-directory-b2c/
-[adfs-intro]: /azure/active-directory/hybrid/whatis-hybrid-identity
+[adfs-intro]: https://docs.microsoft.com/azure/active-directory/hybrid/whatis-hybrid-identity
 [github]: https://github.com/mspnp/identity-reference-architectures/tree/master/adfs
 [adfs_certificates]: https://technet.microsoft.com/library/dn781428(v=ws.11).aspx
-[considerations]: ./considerations.md
+[considerations]: ./index.md
 [visio-download]: https://archcenter.blob.core.windows.net/cdn/identity-architectures.vsdx
+[psise]: https://docs.microsoft.com/powershell/scripting/windows-powershell/ise/introducing-the-windows-powershell-ise
+[azure-pricing-calculator]: https://azure.microsoft.com/pricing/calculator

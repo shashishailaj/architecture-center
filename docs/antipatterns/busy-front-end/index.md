@@ -4,8 +4,13 @@ titleSuffix: Performance antipatterns for cloud apps
 description: Asynchronous work on a large number of background threads can starve other foreground tasks of resources.
 author: dragon119
 ms.date: 06/05/2017
+ms.topic: article
+ms.service: architecture-center
+ms.subservice: cloud-fundamentals
 ms.custom: seodec18
 ---
+
+<!-- cSpell:ignore workinfrontend workinbackground Hudgens userprofile -->
 
 # Busy Front End antipattern
 
@@ -20,7 +25,7 @@ Resource-intensive tasks can increase the response times for user requests and c
 
 This problem typically occurs when an application is developed as monolithic piece of code, with all of the business logic combined into a single tier shared with the presentation layer.
 
-Here’s an example using ASP.NET that demonstrates the problem. You can find the complete sample [here][code-sample].
+Here's an example using ASP.NET that demonstrates the problem. You can find the complete sample [here][code-sample].
 
 ```csharp
 public class WorkInFrontEndController : ApiController
@@ -84,7 +89,7 @@ public class WorkInBackgroundController : ApiController
     [Route("api/workinbackground")]
     public async Task<long> Post()
     {
-        return await ServiceBusQueuehandler.AddWorkLoadToQueueAsync(QueueClient, QueueName, 0);
+        return await ServiceBusQueueHandler.AddWorkLoadToQueueAsync(QueueClient, QueueName, 0);
     }
 }
 ```
@@ -101,7 +106,7 @@ public async Task RunAsync(CancellationToken cancellationToken)
             try
             {
                 // Simulate processing of message
-                Thread.SpinWait(Int32.Maxvalue / 1000);
+                Thread.SpinWait(Int32.MaxValue / 1000);
 
                 await receivedMessage.CompleteAsync();
             }
@@ -138,7 +143,7 @@ The following sections apply these steps to the sample application described ear
 
 ### Identify points of slowdown
 
-Instrument each method to track the duration and resources consumed by each request. Then monitor the application in production. This can provide an overall view of how requests compete with each other. During periods of stress, slow-running resource-hungry requests will likely impact other operations, and this behavior can be observed by monitoring the system and noting the drop off in performance.
+Instrument each method to track the duration and resources consumed by each request. Then monitor the application in production. This can provide an overall view of how requests compete with each other. During periods of stress, slow-running resource-hungry requests will likely affect other operations, and this behavior can be observed by monitoring the system and noting the drop off in performance.
 
 The following image shows a monitoring dashboard. (We used [AppDynamics] for our tests.) Initially, the system has light load. Then users start requesting the `UserProfile` GET method. The performance is reasonably good until other users start issuing requests to the `WorkInFrontEnd` POST method. At that point, response times increase dramatically (first arrow). Response times only improve after the volume of requests to the `WorkInFrontEnd` controller diminishes (second arrow).
 
@@ -162,7 +167,7 @@ The graph below shows the results of a load test performed against an identical 
 
 Initially, the step load is 0, so the only active users are performing the `UserProfile` requests. The system is able to respond to approximately 500 requests per second. After 60 seconds, a load of 100 additional users starts sending POST requests to the `WorkInFrontEnd` controller. Almost immediately, the workload sent to the `UserProfile` controller drops to about 150 requests per second. This is due to the way the load-test runner functions. It waits for a response before sending the next request, so the longer it takes to receive a response, the lower the request rate.
 
-As more users send POST requests to the `WorkInFrontEnd` controller, the response rate of the `UserProfile` controller continues to drop. But note that the volume of requests handled by the `WorkInFrontEnd`controller remains relatively constant. The saturation of the system becomes apparent as the overall rate of both requests tends towards a steady but low limit.
+As more users send POST requests to the `WorkInFrontEnd` controller, the response rate of the `UserProfile` controller continues to drop. But note that the volume of requests handled by the `WorkInFrontEnd`controller remains relatively constant. The saturation of the system becomes apparent as the overall rate of both requests tends toward a steady but low limit.
 
 ### Review the source code
 
@@ -185,7 +190,7 @@ CPU and network utilization also show the improved performance. The CPU utilizat
 
 ![AppDynamics metrics showing the CPU and network utilization for the WorkInBackground controller][AppDynamics-Metrics-Background-Requests]
 
-The following graph shows the results of a load test. The overall volume of requests serviced is greatly improved compared to the the earlier tests.
+The following graph shows the results of a load test. The overall volume of requests serviced is greatly improved compared to the earlier tests.
 
 ![Load-test results for the BackgroundImageProcessing controller][Load-Test-Results-Background]
 
@@ -196,18 +201,14 @@ The following graph shows the results of a load test. The overall volume of requ
 - [Queue-Based Load Leveling pattern][load-leveling]
 - [Web Queue Worker architecture style][web-queue-worker]
 
-[AppDyanamics]: https://www.appdynamics.com/
-[autoscaling]: /azure/architecture/best-practices/auto-scaling
-[background-jobs]: /azure/architecture/best-practices/background-jobs
+[AppDynamics]: https://www.appdynamics.com
+[autoscaling]: ../../best-practices/auto-scaling.md
+[background-jobs]: ../../best-practices/background-jobs.md
 [code-sample]: https://github.com/mspnp/performance-optimization/tree/master/BusyFrontEnd
-[fullDemonstrationOfSolution]: https://github.com/mspnp/performance-optimization/tree/master/BusyFrontEnd
-[load-leveling]: /azure/architecture/patterns/queue-based-load-leveling
+[load-leveling]: ../../patterns/queue-based-load-leveling.md
 [sync-io]: ../synchronous-io/index.md
-[web-queue-worker]: /azure/architecture/guide/architecture-styles/web-queue-worker
+[web-queue-worker]: ../../guide/architecture-styles/web-queue-worker.md
 
-[WebJobs]: https://www.hanselman.com/blog/IntroducingWindowsAzureWebJobs.aspx
-[ComputePartitioning]: https://msdn.microsoft.com/library/dn589773.aspx
-[ServiceBusQueues]: https://msdn.microsoft.com/library/azure/hh367516.aspx
 [AppDynamics-Transactions-Front-End-Requests]: ./_images/AppDynamicsPerformanceStats.jpg
 [AppDynamics-Metrics-Front-End-Requests]: ./_images/AppDynamicsFrontEndMetrics.jpg
 [Initial-Load-Test-Results-Front-End]: ./_images/InitialLoadTestResultsFrontEnd.jpg

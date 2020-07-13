@@ -5,12 +5,13 @@ description: Protect applications and services by using a dedicated host instanc
 keywords: design pattern
 author: dragon119
 ms.date: 06/23/2017
+ms.topic: design-pattern
+ms.service: architecture-center
+ms.subservice: cloud-fundamentals
 ms.custom: seodec18
 ---
 
 # Gatekeeper pattern
-
-[!INCLUDE [header](../_includes/header.md)]
 
 Protect applications and services by using a dedicated host instance that acts as a broker between clients and the application or service, validates and sanitizes requests, and passes requests and data between them. This can provide an additional layer of security, and limit the attack surface of the system.
 

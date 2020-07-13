@@ -2,26 +2,37 @@
 title: Design a CI/CD pipeline using Azure DevOps
 titleSuffix: Azure Example Scenarios
 description: Build and release a .NET app to Azure Web Apps using Azure DevOps.
-author: christianreddington
+author: chrisreddington
 ms.date: 12/06/2018
+ms.category:
+  - developer-tools
+  - devops
+  - web
+  - featured
+ms.topic: example-scenario
+ms.service: architecture-center
+ms.subservice: example-scenario
 ms.custom:
-    - fasttrack
-    - seodec18
+  - fasttrack
+  - seodec18
+  - devops
+  - app-development
+social_image_url: /azure/architecture/example-scenario/apps/media/architecture-devops-dotnet-webapp.svg
 ---
 
 # Design a CI/CD pipeline using Azure DevOps
 
 This scenario provides architecture and design guidance for building a continuous integration (CI) and continuous deployment (CD) pipeline. In this example, the CI/CD pipeline deploys a two-tier .NET web application to the Azure App Service.
 
-Migrating to modern CI/CD processes provides many benefits for application builds, deployments, testing, and monitoring. By utilizing Azure DevOps along with other services such as App Service, organizations can focus on the development of their apps rather than the management of the supporting infrastructure.
+Migrating to modern CI/CD processes provides many benefits for application builds, deployments, testing, and monitoring. By using Azure DevOps along with other services such as App Service, organizations can focus on the development of their apps rather than the management of the supporting infrastructure.
 
 ## Relevant use cases
 
 Consider Azure DevOps and CI/CD processes for:
 
-- Accelerating application development and development life cycles
+- Accelerating application development and development lifecycles.
 - Building quality and consistency into an automated build and release process
-- Increasing application stability and uptime
+- Increasing application stability and uptime.
 
 ## Architecture
 
@@ -35,12 +46,12 @@ The data flows through the scenario as follows:
 4. Continuous deployment within Azure Pipelines triggers an automated deployment of application artifacts *with environment-specific configuration values*.
 5. The artifacts are deployed to Azure App Service.
 6. Azure Application Insights collects and analyzes health, performance, and usage data.
-7. Developers monitor and mange health, performance, and usage information.
+7. Developers monitor and manage health, performance, and usage information.
 8. Backlog information is used to prioritize new features and bug fixes using Azure Boards.
 
 ### Components
 
-- [Azure DevOps][vsts] is a service for managing your development life cycle end-to-end &mdash; from planning and project management, to code management, and continuing to build and release.
+- [Azure DevOps][vsts] is a service for managing your development lifecycle end-to-end&mdash;from planning and project management, to code management, and continuing to build and release.
 
 - [Azure Web Apps][web-apps] is a PaaS service for hosting web applications, REST APIs, and mobile back ends. While this article focuses on .NET, there are several additional development platform options supported.
 
@@ -60,7 +71,7 @@ You could consider these alternatives to hosting in Azure Web Apps:
 
 - [Azure Functions][azure-functions] provides an effective serverless approach if the workload architecture is centered around fine grained distributed components, requiring minimal dependencies, where individual components are only required to run on demand (not continuously) and orchestration of components is not required.
 
-This [decision tree for Azure compute services](/azure/architecture/guide/technology-choices/compute-decision-tree) may help when choosing the right path to take for a migration.
+This [decision tree for Azure compute services](../../guide/technology-choices/compute-decision-tree.md) may help when choosing the right path to take for a migration.
 
 ## Management and Security Considerations
 
@@ -86,11 +97,11 @@ This [decision tree for Azure compute services](/azure/architecture/guide/techno
 
 ### Walk-through
 
-The [Azure DevOps project](/azure/devops-project/azure-devops-project-github) will deploy an App Service Plan, App Service, and an App Insights resource for you, as well as configure the Azure DevOps project for you.
+[Azure DevOps Projects](https://docs.microsoft.com/azure/devops-project/azure-devops-project-github) will deploy an App Service Plan, App Service, and an App Insights resource for you, as well as configure an Azure Pipelines pipeline for you.
 
-Once you've deployed the Azure DevOps project and the build is completed, review the associated code changes, work items, and test results. You will notice that no test results are displayed, because the code does not contain any tests to run.
+Once you've configure a pipeline with Azure DevOps Projects and the build is completed, review the associated code changes, work items, and test results. You will notice that no test results are displayed, because the code does not contain any tests to run.
 
-The project creates a release pipeline and continuous deployment trigger, deploying our application into the Dev environment. As part of a continuous deployment process, you may see releases that span multiple environments. A release can span both infrastructure (using techniques such as infrastructure-as-code), and can also deploy the application packages required along with any post-configuration tasks.
+The pipeline creates a release definition and a continuous deployment trigger, deploying our application into the Dev environment. As part of a continuous deployment process, you may see releases that span multiple environments. A release can span both infrastructure (using techniques such as infrastructure-as-code), and can also deploy the application packages required along with any post-configuration tasks.
 
 ## Pricing
 
@@ -98,7 +109,7 @@ Azure DevOps costs depend on the number of users in your organization that requi
 
 This [pricing calculator][vsts-pricing-calculator] provides an estimate for running Azure DevOps with 20 users.
 
-Azure DevOps is billed on a per-user per-month basis. There may be additional charges dependent upon concurrent pipelines needed, in addition to any additional test users or user basic licenses.
+Azure DevOps is billed on a per-user per-month basis. There may be additional charges depending on concurrent pipelines needed, in addition to any additional test users or user basic licenses.
 
 ## Related resources
 
@@ -107,54 +118,38 @@ Review the following resources to learn more about CI/CD and Azure DevOps:
 - [What is DevOps?][devops-whatis]
 - [DevOps at Microsoft - How we work with Azure DevOps][devops-microsoft]
 - [Step-by-step Tutorials: DevOps with Azure DevOps][devops-with-vsts]
-- [Devops Checklist][devops-checklist]
-- [Create a CI/CD pipeline for .NET with the Azure DevOps project][devops-project-create]
+- [DevOps Checklist][devops-checklist]
+- [Create a CI/CD pipeline for .NET with Azure DevOps Projects][devops-project-create]
 
 <!-- links -->
 
-[ansible]: /azure/ansible/
-[application-insights]: /azure/application-insights/app-insights-overview
-[app-service-reference-architecture]: ../../reference-architectures/app-service-web-app/basic-web-app.md
-[arm-templates]: /azure/azure-resource-manager/resource-group-overview#template-deployment
+[ansible]: https://docs.microsoft.com/azure/developer/ansible/
+[application-insights]: https://docs.microsoft.com/azure/application-insights/app-insights-overview
+[arm-templates]: https://docs.microsoft.com/azure/azure-resource-manager/template-deployment-overview
 [architecture]: ./media/architecture-devops-dotnet-webapp.svg
-[chef]: /azure/chef/
-[design-patterns-availability]: /azure/architecture/patterns/category/availability
-[design-patterns-resiliency]: /azure/architecture/patterns/category/resiliency
-[design-patterns-scalability]: /azure/architecture/patterns/category/performance-scalability
-[design-patterns-security]: /azure/architecture/patterns/category/security
-[desired-state-configuration]: /azure/automation/automation-dsc-overview
-[devops-microsoft]: /azure/devops/devops-at-microsoft/
-[devops-with-vsts]: https://almvm.azurewebsites.net/labs/vsts/
-[devops-checklist]: /azure/architecture/checklist/dev-ops
-[application-insights]: https://azure.microsoft.com/services/application-insights/
-[cloud-based-load-testing]: https://visualstudio.microsoft.com/team-services/cloud-load-testing/
-[cloud-based-load-testing-on-premises]: /vsts/test/load-test/clt-with-private-machines?view=vsts
-[jenkins-on-azure]: /azure/jenkins/
-[devops-whatis]: /azure/devops/what-is-devops
-[download-keyvault-secrets]: /vsts/pipelines/tasks/deploy/azure-key-vault?view=vsts
-[resource-groups]: /azure/azure-resource-manager/resource-group-overview
-[resiliency-app-service]: /azure/architecture/checklist/resiliency-per-service#app-service
-[vsts]: /vsts/?view=vsts#pivot=services
-[continuous-integration]: /azure/devops/what-is-continuous-integration
-[continuous-delivery]: /azure/devops/what-is-continuous-delivery
-[web-apps]: /azure/app-service/app-service-web-overview
-[vsts-account-create]: /azure/devops/organizations/accounts/create-organization-msa-or-work-student?view=vsts
-[vsts-approvals]: /vsts/pipelines/release/approvals/approvals?view=vsts
-[devops-project]: https://portal.azure.com/?feature.customportal=false#create/Microsoft.AzureProject
-[vsts-deployment-gates]: /vsts/pipelines/release/approvals/gates?view=vsts
+[chef]: https://docs.microsoft.com/azure/chef
+[desired-state-configuration]: https://docs.microsoft.com/azure/automation/automation-dsc-overview
+[devops-microsoft]: https://docs.microsoft.com/azure/devops/devops-at-microsoft
+[devops-with-vsts]: https://www.azuredevopslabs.com/labs/vstsextend/azuredevopsprojectdotnet
+[devops-checklist]: ../../checklist/dev-ops.md
+[application-insights]: https://azure.microsoft.com/services/application-insights
+[jenkins-on-azure]: https://docs.microsoft.com/azure/jenkins
+[devops-whatis]: https://docs.microsoft.com/azure/devops/what-is-devops
+[download-keyvault-secrets]: https://docs.microsoft.com/vsts/pipelines/tasks/deploy/azure-key-vault?view=vsts
+[vsts]: https://docs.microsoft.com/azure/devops
+[web-apps]: https://docs.microsoft.com/azure/app-service/app-service-web-overview
+[vsts-account-create]: https://docs.microsoft.com/azure/devops/organizations/accounts/create-organization-msa-or-work-student?view=vsts
+[vsts-approvals]: https://docs.microsoft.com/vsts/pipelines/release/approvals/approvals?view=vsts
+[vsts-deployment-gates]: https://docs.microsoft.com/vsts/pipelines/release/approvals/gates?view=vsts
 [vsts-pricing-calculator]: https://azure.com/e/498aa024454445a8a352e75724f900b1
-[vsts-pricing-page]: https://azure.microsoft.com/pricing/details/visual-studio-team-services/
-[vsts-release-variables]: /vsts/pipelines/release/variables?view=vsts&tabs=batch
+[vsts-pricing-page]: https://azure.microsoft.com/pricing/details/visual-studio-team-services
+[vsts-release-variables]: https://docs.microsoft.com/vsts/pipelines/release/variables?view=vsts&tabs=batch
 [vsts-tokenization]: https://marketplace.visualstudio.com/search?term=token&target=VSTS&category=All%20categories&sortBy=Relevance
-[azure-key-vault]: /azure/key-vault/key-vault-overview
-[infra-as-code]: https://blogs.msdn.microsoft.com/mvpawardprogram/2018/02/13/infrastructure-as-code/
-[azure-devops-server]: https://visualstudio.microsoft.com/tfs/
-[infra-as-code]: https://blogs.msdn.microsoft.com/mvpawardprogram/2018/02/13/infrastructure-as-code/
-[service-fabric]: /azure/service-fabric/
-[azure-functions]: /azure/azure-functions/
-[azure-containers]: https://azure.microsoft.com/overview/containers/
-[compare-vm-hosting]: /azure/app-service/choose-web-site-cloud-service-vm
-[app-insights-cd-monitoring]: /azure/application-insights/app-insights-vsts-continuous-monitoring
-[azure-region-pair-bcdr]: /azure/best-practices-availability-paired-regions
-[devops-project-create]: /azure/devops-project/azure-devops-project-aspnet-core
-[terraform]: /azure/terraform/
+[infra-as-code]: https://blogs.msdn.microsoft.com/mvpawardprogram/2018/02/13/infrastructure-as-code
+[azure-devops-server]: https://visualstudio.microsoft.com/tfs
+[infra-as-code]: https://blogs.msdn.microsoft.com/mvpawardprogram/2018/02/13/infrastructure-as-code
+[service-fabric]: https://docs.microsoft.com/azure/service-fabric
+[azure-functions]: https://docs.microsoft.com/azure/azure-functions
+[compare-vm-hosting]: https://docs.microsoft.com/azure/app-service/choose-web-site-cloud-service-vm
+[devops-project-create]: https://docs.microsoft.com/azure/devops-project/azure-devops-project-aspnet-core
+[terraform]: https://docs.microsoft.com/azure/terraform

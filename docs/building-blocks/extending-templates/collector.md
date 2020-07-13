@@ -1,10 +1,17 @@
 ---
 title: Implement a property transformer and collector in an Azure Resource Manager template
 description: Describes how to implement a property transformer and collector in an Azure Resource Manager template.
-author: petertay
+author: PeterTaylor9999
 ms.date: 10/30/2018
-
+ms.topic: article
+ms.service: architecture-center
+ms.category:
+  - developer-tools
+  - devops
+ms.subservice: reference-architecture
 ---
+
+<!-- cSpell:ignore copyindex -->
 
 # Implement a property transformer and collector in an Azure Resource Manager template
 
@@ -15,25 +22,25 @@ To work around this, you can implement a property transform and collector templa
 > [!IMPORTANT]
 > This approach requires that you have a deep understanding of Resource Manager templates and functions.
 
-Let's take a look at how we can implement a property collector and transformer with an example that deploys a [network security group (NSG)][nsg]. The diagram below shows the relationship between our templates and our resources within those templates:
+Let's take a look at how we can implement a property collector and transformer with an example that deploys a [network security group][nsg]. The diagram below shows the relationship between our templates and our resources within those templates:
 
 ![property collector and transformer architecture](../_images/collector-transformer.png)
 
 Our **calling template** includes two resources:
 
 - A template link that invokes our **collector template**.
-- The NSG resource to deploy.
+- The network security group resource to deploy.
 
 Our **collector template** includes two resources:
 
 - An **anchor** resource.
 - A template link that invokes the transform template in a copy loop.
 
-Our **transform template** includes a single resource: an empty template with a variable that transforms our `source` JSON to the JSON schema expected by our NSG resource in the **main template**.
+Our **transform template** includes a single resource: an empty template with a variable that transforms our `source` JSON to the JSON schema expected by our network security group resource in the **main template**.
 
 ## Parameter object
 
-We'll be using our `securityRules` parameter object from [objects as parameters][objects-as-parameters]. Our **transform template** will transform each object in the `securityRules` array into the JSON schema expected by the NSG resource in our **calling template**.
+We'll be using our `securityRules` parameter object from [objects as parameters][objects-as-parameters]. Our **transform template** will transform each object in the `securityRules` array into the JSON schema expected by the network security group resource in our **calling template**.
 
 ```json
 {
@@ -319,9 +326,8 @@ az group deployment create -g <resource-group-name> \
 ```
 
 <!-- links -->
+
 [objects-as-parameters]: ./objects-as-parameters.md
-[resource-manager-linked-template]: /azure/azure-resource-manager/resource-group-linked-templates
-[resource-manager-variables]: /azure/azure-resource-manager/resource-group-template-functions-deployment
-[nsg]: /azure/virtual-network/virtual-networks-nsg
-[cli]: /cli/azure/?view=azure-cli-latest
+[nsg]: https://docs.microsoft.com/azure/virtual-network/virtual-networks-nsg
+[cli]: https://docs.microsoft.com/cli/azure/?view=azure-cli-latest
 [github]: https://github.com/mspnp/template-examples

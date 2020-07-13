@@ -1,9 +1,14 @@
 ---
 title: Conditionally deploy a resource in an Azure Resource Manager template
-description: Describes how to extend the functionality of Azure Resource Manager templates to conditionally deploy a resource dependending on the value of a parameter.
-author: petertay
+description: Describes how to extend the functionality of Azure Resource Manager templates to conditionally deploy a resource depending on the value of a parameter.
+author: PeterTaylor9999
 ms.date: 10/30/2018
-
+ms.topic: article
+ms.service: architecture-center
+ms.category:
+  - developer-tools
+  - devops
+ms.subservice: reference-architecture
 ---
 
 # Conditionally deploy a resource in an Azure Resource Manager template
@@ -114,7 +119,7 @@ Next, we specify our `copy` loop. It's a `serial` loop that means the loop is do
   },
 ```
 
-Our `workaround` variable includes two properties, one named `true` and one named `false`. The `true` property evaluates to the value of the `virtualNetworkPeerings` parameter array. The `false` property evaluates to an empty object including the named properties that Resource Manager expects to see &mdash; note that `false` is actually an array, just as our `virtualNetworkPeerings` parameter is, which will satisfy validation.
+Our `workaround` variable includes two properties, one named `true` and one named `false`. The `true` property evaluates to the value of the `virtualNetworkPeerings` parameter array. The `false` property evaluates to an empty object including the named properties that Resource Manager expects to see&mdash;note that `false` is actually an array, just as our `virtualNetworkPeerings` parameter is, which will satisfy validation.
 
 Our `peerings` variable uses our `workaround` variable by once again testing if the length of the `virtualNetworkPeerings` parameter array is greater than zero. If it is, the `string` evaluates to `true` and the `workaround` variable evaluates to the `virtualNetworkPeerings` parameter array. Otherwise, it evaluates to `false` and the `workaround` variable evaluates to our empty object in the first element of the array.
 
@@ -132,11 +137,10 @@ az group deployment create -g <resource-group-name> \
 
 ## Next steps
 
-* Use objects instead of scalar values as template parameters. See [Use an object as a parameter in an Azure Resource Manager template](./objects-as-parameters.md)
+- Use objects instead of scalar values as template parameters. See [Use an object as a parameter in an Azure Resource Manager template](./objects-as-parameters.md)
 
 <!-- links -->
-[azure-resource-manager-condition]: /azure/azure-resource-manager/resource-manager-templates-resources#condition
-[azure-resource-manager-variable]: /azure/azure-resource-manager/resource-group-authoring-templates#variables
-[vnet-peering-resource-schema]: /azure/templates/microsoft.network/virtualnetworks/virtualnetworkpeerings
-[cli]: /cli/azure/?view=azure-cli-latest
+[azure-resource-manager-condition]: https://docs.microsoft.com/azure/azure-resource-manager/resource-group-authoring-templates#resources
+[vnet-peering-resource-schema]: https://docs.microsoft.com/azure/templates/microsoft.network/virtualnetworks/virtualnetworkpeerings
+[cli]: https://docs.microsoft.com/cli/azure/?view=azure-cli-latest
 [github]: https://github.com/mspnp/template-examples

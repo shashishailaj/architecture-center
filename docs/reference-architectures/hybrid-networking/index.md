@@ -1,9 +1,15 @@
 ---
 title: Connect an on-premises network to Azure
-titleSuffix: Azure Reference Architectures
 description: Compare reference architectures for connecting an on-premises network to Azure.
 author: telmosampaio
 ms.date: 07/02/2018
+ms.topic: reference-architecture
+ms.service: architecture-center
+ms.category:
+  - hybrid
+  - networking
+ms.subservice: reference-architecture
+ms.custom: networking
 ---
 
 # Choose a solution for connecting an on-premises network to Azure
@@ -12,19 +18,19 @@ This article compares options for connecting an on-premises network to an Azure 
 
 ## VPN connection
 
-A [VPN gateway](/azure/vpn-gateway/vpn-gateway-about-vpngateways) is a type of virtual network gateway that sends encrypted traffic between an Azure virtual network and an on-premises location. The encrypted traffic goes over the public Internet.
+A [VPN gateway](https://docs.microsoft.com/azure/vpn-gateway/vpn-gateway-about-vpngateways) is a type of virtual network gateway that sends encrypted traffic between an Azure virtual network and an on-premises location. The encrypted traffic goes over the public Internet.
 
 This architecture is suitable for hybrid applications where the traffic between on-premises hardware and the cloud is likely to be light, or you are willing to trade slightly extended latency for the flexibility and processing power of the cloud.
 
 ### Benefits
 
 - Simple to configure.
+- Much higher bandwidth available; up to 10 Gbps depending on the VPN Gateway SKU.
 
 ### Challenges
 
 - Requires an on-premises VPN device.
 - Although Microsoft guarantees 99.9% availability for each VPN Gateway, this [SLA](https://azure.microsoft.com/support/legal/sla/vpn-gateway/) only covers the VPN gateway, and not your network connection to the gateway.
-- A VPN connection over Azure VPN Gateway currently supports a maximum of 1.25 Gbps bandwidth. You may need to partition your Azure virtual network across multiple VPN connections if you expect to exceed this throughput.
 
 ### Reference architecture
 
@@ -34,7 +40,7 @@ This architecture is suitable for hybrid applications where the traffic between 
 
 ## Azure ExpressRoute connection
 
-[ExpressRoute](/azure/expressroute/) connections use a private, dedicated connection through a third-party connectivity provider. The private connection extends your on-premises network into Azure.
+[ExpressRoute](https://docs.microsoft.com/azure/expressroute/) connections use a private, dedicated connection through a third-party connectivity provider. The private connection extends your on-premises network into Azure.
 
 This architecture is suitable for hybrid applications running large-scale, mission-critical workloads that require a high degree of scalability.
 

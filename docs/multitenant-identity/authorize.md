@@ -1,9 +1,13 @@
 ---
 title: Authorization in multitenant applications
 description: How to perform authorization in a multitenant application.
-author: MikeWasson
+author: adamboeglin
 ms.date: 07/21/2017
-
+ms.topic: guide
+ms.service: architecture-center
+ms.category:
+  - identity
+ms.subservice: reference-architecture
 pnp.series.title: Manage Identity in Multitenant Applications
 pnp.series.prev: app-roles
 pnp.series.next: web-api
@@ -20,7 +24,7 @@ Our [reference implementation] is an ASP.NET Core application. In this article w
 
 A typical app will employ a mix of both. For example, to delete a resource, the user must be the resource owner *or* an admin.
 
-## Role-Based Authorization
+## Role-based authorization
 
 The [Tailspin Surveys][Tailspin] application defines the following roles:
 
@@ -108,9 +112,9 @@ This is still supported in ASP.NET Core, but it has some drawbacks compared with
 
 * It assumes a particular claim type. Policies can check for any claim type. Roles are just a type of claim.
 * The role name is hard-coded into the attribute. With policies, the authorization logic is all in one place, making it easier to update or even load from configuration settings.
-* Policies enable more complex authorization decisions (e.g., age >= 21) that can't be expressed by simple role membership.
+* Policies enable more complex authorization decisions (for example, age >= 21) that can't be expressed by simple role membership.
 
-## Resource based authorization
+## Resource-based authorization
 
 *Resource based authorization* occurs whenever the authorization depends on a specific resource that will be affected by an operation. In the Tailspin Surveys application, every survey has an owner and zero-to-many contributors.
 
@@ -218,9 +222,9 @@ public class SurveyAuthorizationHandler : AuthorizationHandler<OperationAuthoriz
 }
 ```
 
-In a multi-tenant application, you must ensure that permissions don't "leak" to another tenant's data. In the Surveys app, the Contributor permission is allowed across tenants &mdash; you can assign someone from another tenant as a contributor. The other permission types are restricted to resources that belong to that user's tenant. To enforce this requirement, the code checks the tenant ID before granting the permission. (The `TenantId` field as assigned when the survey is created.)
+In a multitenant application, you must ensure that permissions don't "leak" to another tenant's data. In the Surveys app, the Contributor permission is allowed across tenants&mdash;you can assign someone from another tenant as a contributor. The other permission types are restricted to resources that belong to that user's tenant. To enforce this requirement, the code checks the tenant ID before granting the permission. (The `TenantId` field as assigned when the survey is created.)
 
-The next step is to check the operation (read, update, delete, etc) against the permissions. The Surveys app implements this step by using a lookup table of functions:
+The next step is to check the operation (such as read, update, or delete) against the permissions. The Surveys app implements this step by using a lookup table of functions:
 
 ```csharp
 static readonly Dictionary<OperationAuthorizationRequirement, Func<List<UserPermissionType>, bool>> ValidateUserPermissions
@@ -249,11 +253,10 @@ static readonly Dictionary<OperationAuthorizationRequirement, Func<List<UserPerm
 
 <!-- links -->
 
-[Tailspin]: tailspin.md
-
-[Application roles]: app-roles.md
-[policies]: /aspnet/core/security/authorization/policies
-[reference implementation]: tailspin.md
-[Configuring the authentication middleware]: authenticate.md#configure-the-auth-middleware
+[Tailspin]: ./tailspin.md
+[Application roles]: ./app-roles.md
+[policies]: https://docs.microsoft.com/aspnet/core/security/authorization/policies
+[reference implementation]: ./tailspin.md
+[Configuring the authentication middleware]: ./authenticate.md#configure-the-auth-middleware
 [sample application]: https://github.com/mspnp/multitenant-saas-guidance
-[web-api]: web-api.md
+[web-api]: ./web-api.md
